@@ -7,7 +7,7 @@ template: essay.jade
 
 ![](http://4.bp.blogspot.com/_vt749aV4Y7Q/TQ0RGGCoOkI/AAAAAAAAFsA/fKNZwumM1fI/s1600/palace%2Bof%2Bzinn.jpg)
 
-In the last decade, inside the Kingdom of Javascript, much has happened around asynchronous programming.  
+In the last decade in the Kingdom of Javascript, much has happened around asynchronous programming.  
 A prominent discussion that is still taking place is Promises vs Callbacks. Now I don't intend to add more fuel to the fire, but I do intend state, or restate, a concept in programming that should affect the whole thing.
 
 ## Using Values
