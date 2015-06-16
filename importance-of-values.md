@@ -15,7 +15,7 @@ n = add 1, 2 # 3
 The `add` function here is very simple. It takes in two values, adds them together, and then returns the result of that expression. You could even begin to point out that this type of operation would be considered synchronous, meaning it doesn’t do anything asynchronous. Well let’s see some typical asynchronous code.
 
 ```
-readFile ‘./file’, (err, data) ->
+readFile './file', (err, data) ->
   # do something with err and data
 ```
 
@@ -25,7 +25,7 @@ What should we expect the `readFile` function to return?
 Now technically we don’t know what it should return, there’s not really a standard on what it should return since what can it return? It’s not going to have the values we care about so what would we expect from it, and if it did return something should we even care about it? My point ultimately here is that we’ve now stopped programming with functions always returning values because we started doing asynchronous work. Now the solution here isn’t to start programming everything with synchronous operations, the asynchronous part here is good, we just want the asynchronous function to return a useful value. This is where I think Promises solve this problem fairly well. Instead of passing in all the arguments with a callback function, we just pass in all the arguments needed to perform the asynchronous operation.
 
 ```
-file = readFile ‘./file’
+file = readFile './file’
 file
   .then (data) -> # do something with data
   .catch (err) -> # do something with err
@@ -35,7 +35,7 @@ In this scenario we now just pass the path string to the `readFile` function. `r
 Callbacks code is limited by the fact that they don’t have a way to state that the asynchronous functions are doing work that is pending. In order to convey this idea of pending work through the function we would need to introduce the concept of the asynchronous function, that does pending work, to return a pending value that corresponds to that pending work.
 
 ```
-pendingValue = readFile ‘./file’
+pendingValue = readFile './file’
 pendingValue.done (err, data) ->
   # do something with err and data
 ```
@@ -43,7 +43,7 @@ pendingValue.done (err, data) ->
 Which hypothetically will work, but all I’ve done in this case is decided to use a different type to represent the value, rather than a Promise. Which I think is totally fine, in fact there are other constructs that you can use to do this, Streams for example.	
 
 ```
-file = readFile ‘./file’
+file = readFile './file’
 file.map (data) -> # do something with data
 file.errors (err, push) -> # do something with err
 ```
