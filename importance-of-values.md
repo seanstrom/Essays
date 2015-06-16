@@ -31,7 +31,15 @@ pending
   .catch (err) -> # do something with err
 ```
 
+In this scenario we now just pass the path string to the `readFile` function. `readFile` will return a Promise because it's performing an asynchronous task. We then use the `.then` and `.catch` methods to access the Promises pending value when it is finished reading file. Now the most important take away here is that we're using the Promise type in our system as the value, or contract, between the asynchronous work and the consumer of the asynchronous work. And because Promises have a defined API and mechanics, we can assume and abstract over the way they work. We now can keep composing our functions, just like we would with synchronous code, but with asynchronous functions that rely on the Promise type. Being able to compose my functions this way is very important to me. I feel that having this high compose-ability leads to more modular code, that's easily kept decoupled by the boundaries of your returning values. Unfortunately you won't be able to achieve the same amount of power with using callbacks as your primary pattern.
+Callbacks code is limited by the fact that they don't have a way to state that the asynchronous functions are doing work that is pending. In order to convey this idea of pending work through the function we would need to introduce the concept of the asynchronous function, that does pending work, to return a pending value that corresponds to that pending work.
+
 ```coffeescript
+pending = readFile './file'
+pending
+  .then (data) -> # do something with data
+  .catch (err) -> # do something with err
+
 pendingValue = readFile './file'
 pendingValue.done (err, data) ->
   # do something with err and data
