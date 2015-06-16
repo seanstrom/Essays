@@ -40,7 +40,7 @@ pendingValue.done (err, data) ->
   # do something with err and data
 ```
 
-Which hypothetically will work, but all I've done in this case is decided to use a different type to represent the value, rather than a Promise. Which I think is totally fine, in fact there are other constructs that you can use to do this, Streams for example.	
+Which hypothetically will work, but all I've done in this case is decided to use a different type to represent the value, rather than a Promise. Which I think is totally fine, in fact there are other constructs that you can use to do this, Streams for example.
 
 ```coffeescript
 file = readFile './file'
