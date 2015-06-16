@@ -8,7 +8,7 @@ template: essay.jade
 ![](http://4.bp.blogspot.com/_vt749aV4Y7Q/TQ0RGGCoOkI/AAAAAAAAFsA/fKNZwumM1fI/s1600/palace%2Bof%2Bzinn.jpg)
 
 In the last decade in the Kingdom of Javascript, much has happened around asynchronous programming.  
-Many prominent discussions have taken place and are still taking place around Promises and Callbacks. Now I don't intend to add more fuel to the fire, but I do intend state, or restate, a concept that should affect the whole thing.
+Many prominent discussions have taken place and are still taking place around Promises and Callbacks, which is about beaten to death. However I feel that an important concept needs to stated, or at least restated, that should affect which tool we choose.
 
 ## Using Values
 
