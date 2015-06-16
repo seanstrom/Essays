@@ -5,7 +5,12 @@ author: Sean Hagstrom
 template: essay.jade
 ---
 
-In the world of Javascript a lot has happened over the last decade around asynchronous programming and all the different patterns used to program asynchronously. During that time I started programming, and in the last half and I've been programming in Javascript. Most of that time I wasn't very conscious of the discussions being had and decisions being made around Javascript and around asynchronous programming, so when I became more aware of the topics I began to backfill the information. Of course one of the most popular discussions would be the debate around Promises, with or without the A+ Spec, and the traditional approach of CPS with callback functions. Through all of that I of course have picked I side that I prefer, and for a while I was pretty dogmatic about which one everyone should prefer. But know I feel that I've reached a point in my career where I realize the true strength in what I want from Promises and how I want to shape all of my code. I know feel that Promises, more specifically A+ Promises, are a means to an end to achieve the design that I want in my system. The design I'm speaking will uses values heavily in between functions and objects as the contract or API between one another. Normally I just have functions that perform operations like transforming data, adding numbers, or manipulating strings, which are easy to model in a Value Driven approach. For example:
+## Intro
+
+In the last decade in the World of Javascript much has happened around asynchronous programming.
+A prominent discussion that is still taking Promises vs Callbacks. Now I don't intend to add more fuel to the fire, but to state or restate an idea about why I would choose Promises over Callbacks.
+
+## Using Values
 
 ```coffeescript
 add = (a, b) -> a + b
