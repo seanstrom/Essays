@@ -18,7 +18,7 @@ and takes in its values and returns a value.
 
 ```coffeescript
 add = (a, b) -> a + b
-getFoo = (a) -> foo: a.foo
+first = (a) -> a[0]
 lowercase = (a) -> a.toLowerCase()
 ```
 
