@@ -12,9 +12,13 @@ A prominent discussion that is still taking Promises vs Callbacks. Now I don't i
 
 ## Using Values
 
+In a given system my ideal workflow would consist of using values between my functions or objects.
+For example I would have functions that perform operations like transforming data, adding numbers, or manipulating strings.
+
 ```coffeescript
 add = (a, b) -> a + b
-n = add 1, 2 # 3
+n = add 1, 2
+n #= 3
 ```
 
 The `add` function here is very simple. It takes in two values, adds them together, and then returns the result of that expression. You could even begin to point out that this type of operation would be considered synchronous, meaning it doesn't do anything asynchronous. Well let's see some typical asynchronous code.
