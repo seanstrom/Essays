@@ -22,7 +22,26 @@ first = (a) -> a[0]
 lowercase = (a) -> a.toLowerCase()
 ```
 
-The `add` function here is very simple. It takes in two values, adds them together, and then returns the result of that expression. You could even begin to point out that this type of operation would be considered synchronous, meaning it doesn't do anything asynchronous. Well let's see some typical asynchronous code.
+The `add`, `first`, and `lowercase` functions are very simple, they all take in the values they need and return a value. Since these functions are that simple it's easy to compose them to build more functions
+
+```coffeescript
+shrinkFirst = (a) -> lowercase (first a)
+abbreviate = (a, b) -> add (shrinkFirst a), (shrinkFirst b)
+```
+
+Composing functions with values is a very simple technique, but the simplicity carries a great amount of power when you start using more meaningful values. For example if we were to create our own value in the system, we can create functions that use that value as the contract between all the functions I want to compose.
+
+```coffeescript
+person = (age, name) ->
+  age: age
+  name: name
+  
+jake = person 22, 'jake'
+```
+
+___
+
+You could even begin to point out that this type of operation would be considered synchronous, meaning it doesn't do anything asynchronous. Well let's see some typical asynchronous code.
 
 ```coffeescript
 readFile './file', (err, data) ->
