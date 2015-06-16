@@ -35,6 +35,14 @@ In this scenario we now just pass the path string to the `readFile` function. `r
 Callbacks code is limited by the fact that they don't have a way to state that the asynchronous functions are doing work that is pending. In order to convey this idea of pending work through the function we would need to introduce the concept of the asynchronous function, that does pending work, to return a pending value that corresponds to that pending work.
 
 ```coffeescript
+pending = readFile './file'
+pending
+  .then (data) -> # do something with data
+  .catch (err) -> # do something with err
+```
+
+```coffeescript
+pe
 pendingValue = readFile './file'
 pendingValue.done (err, data) ->
   # do something with err and data
