@@ -13,7 +13,7 @@ Many prominent discussions have taken place and are still taking place around Pr
 ## Using Values
 
 In an ideal system, my workflow would consist of using values between my functions or objects, and these values would serve as the contracts between all of my code. For example, code that would normally perform operations like transforming data, adding numbers, or manipulating strings, will now be modelled as a function or object method
-and take in its values and return a value.
+and takes in its values and returns a value.
 
 ```coffeescript
 add = (a, b) -> a + b
