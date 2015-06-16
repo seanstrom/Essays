@@ -25,8 +25,8 @@ What should we expect the `readFile` function to return?
 Now technically we don't know what it should return, there's not really a standard on what it should return since what can it return? It's not going to have the values we care about so what would we expect from it, and if it did return something should we even care about it? My point ultimately here is that we've now stopped programming with functions always returning values because we started doing asynchronous work. Now the solution here isn't to start programming everything with synchronous operations, the asynchronous part here is good, we just want the asynchronous function to return a useful value. This is where I think Promises solve this problem fairly well. Instead of passing in all the arguments with a callback function, we just pass in all the arguments needed to perform the asynchronous operation.
 
 ```coffeescript
-pending = readFile './file'
-pending
+pendingValue = readFile './file'
+pendingValue
   .then (data) -> # do something with data
   .catch (err) -> # do something with err
 ```
