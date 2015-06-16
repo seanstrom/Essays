@@ -36,8 +36,9 @@ Callbacks code is limited by the fact that they don't have a way to state that t
 
 ```coffeescript
 pendingValue = readFile './file'
-pendingValue.done (err, data) ->
-  # do something with err and data
+pendingValue
+  .done (err, data) ->
+    # do something with err and data
 ```
 
 ```coffeescript
