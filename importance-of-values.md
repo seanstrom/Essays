@@ -18,7 +18,7 @@ and takes in its values and returns a value.
 ```coffeescript
 add = (a, b) -> a + b
 getFoo = (a) -> foo: a.foo
-lowercase = (s) -> s.toLowerCase()
+lowercase = (a) -> a.toLowerCase()
 ```
 
 The `add` function here is very simple. It takes in two values, adds them together, and then returns the result of that expression. You could even begin to point out that this type of operation would be considered synchronous, meaning it doesn't do anything asynchronous. Well let's see some typical asynchronous code.
