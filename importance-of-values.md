@@ -7,7 +7,9 @@ template: essay.jade
 
 ## Intro
 
-In the last decade in the World of Javascript much has happened around asynchronous programming.
+![](http://4.bp.blogspot.com/_vt749aV4Y7Q/TQ0RGGCoOkI/AAAAAAAAFsA/fKNZwumM1fI/s1600/palace%2Bof%2Bzinn.jpg)
+
+In the last decade in the Kingdom of Javascript much has happened around asynchronous programming.  
 A prominent discussion that is still taking Promises vs Callbacks. Now I don't intend to add more fuel to the fire, but to state or restate an idea about why I would choose Promises over Callbacks.
 
 ## Using Values
