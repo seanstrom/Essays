@@ -17,16 +17,16 @@ In an ideal system, my workflow would consist of using values between my functio
 and takes in its values and returns a value.
 
 ```coffeescript
-add = (a, b) -> a + b
-first = (a) -> a[0]
+add       = (a, b) -> a + b
+first     = (a) -> a[0]
 lowercase = (a) -> a.toLowerCase()
 ```
 
-The `add`, `first`, and `lowercase` functions are very simple, they all take in the values they need and return a value. Since these functions are that simple it's easy to compose them to build more functions
+The `add`, `first`, and `lowercase` functions are very simple, they all take in the values they need and return a value. Since these functions are that simple it's easy to compose them to build more functions.
 
 ```coffeescript
+abbreviate  = (a, b) -> add (shrinkFirst a), (shrinkFirst b)
 shrinkFirst = (a) -> lowercase (first a)
-abbreviate = (a, b) -> add (shrinkFirst a), (shrinkFirst b)
 ```
 
 Composing functions with values is a very simple technique, but the simplicity carries a great amount of power when you start using more meaningful values. For example if we were to create our own value in the system, we can create functions that use that value as the contract between all the functions I want to compose.
@@ -37,6 +37,21 @@ person = (age, name) ->
   name: name
   
 jake = person 22, 'jake'
+```
+
+Now we have defined our own type of value, which is a `person`, and we can created an example person Jake.
+Let's make some functions that can rely on a person value being passed in, and then returning a person value as well.
+
+```coffeescript
+addAge   = (n) -> (p) -> person (n + p.age), p.name
+addTitle = (t) -> (p) -> person p.age, (t + ' ' + p.name)
+```
+
+Here I'm created the functions `addTitle` and `addAge`. Both of these functions return functions, which may seem a bit odd to some, but I did this for good reasons. I intend to create some even simpler helper functions with the help of these most complex ones. Let's see how that would look.
+
+```coffescript
+addMr = addTitle 'Mr.'
+ageBy1 = addAge 1
 ```
 
 ___
