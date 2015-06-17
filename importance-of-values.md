@@ -13,8 +13,13 @@ However I feel that an important concept needs to stated, or at least restated, 
 
 ## Using Values
 
-In an ideal system, my workflow would consist of using values between my functions or objects, and these values would serve as the contracts between all of my code. For example, code that would normally perform operations like transforming data, adding numbers, or manipulating strings, will now be modelled as a function or object method
-and takes in its values and returns a value.
+In an ideal system, my workflow would consist of using values between my functions or objects, and these values would serve as the contracts between all of my code. For example, code that would normally perform operations like: 
+
+* transforming data
+* adding numbers
+* manipulating strings
+
+can now be be modeled as functions or object methods that take in values and return a value.
 
 ```coffeescript
 add       = (a, b) -> a + b
