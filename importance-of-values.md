@@ -9,7 +9,7 @@ template: essay.jade
 
 In the last decade in the Kingdom of Javascript, much has happened around asynchronous programming.  
 Many prominent discussions have taken place and are still taking place around Promises and Callbacks.  
-However I feel that an important concept needs to stated, or at least restated, that should affect which tool we choose.
+However I feel that an important concept needs to be stated, or at very least restated.
 
 ## Using Values
 
