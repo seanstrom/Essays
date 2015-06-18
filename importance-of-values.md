@@ -15,7 +15,7 @@ However I feel that an important concept needs to stated, or at least restated, 
 
 In an ideal system, my workflow would consist of using values between my functions or objects, and these values would serve as the contracts between all of my code. For example, code that would normally perform operations like: 
 
-* transforming data
+* iterating through data
 * adding numbers
 * manipulating strings
 
@@ -34,7 +34,7 @@ abbreviate  = (a, b) -> add (shrinkFirst a), (shrinkFirst b)
 shrinkFirst = (a) -> lowercase (first a)
 ```
 
-Composing functions with values is a very simple technique, but the simplicity carries a great amount of power when you start using more meaningful values. For example if we were to create our own value in the system, we can create functions that use that value as the contract between all the functions I want to compose.
+Composing functions with values is a very simple technique, but the simplicity carries a great amount of power when you start using more meaningful values. For example if we were to create our own value in the system, we can create functions that use that value as the contract between all the functions we want to compose.
 
 ```coffeescript
 person = (age, name) ->
@@ -48,15 +48,32 @@ Now we have defined our own type of value, which is a `person`, and we can creat
 Let's make some functions that can rely on a person value being passed in, and then returning a person value as well.
 
 ```coffeescript
-addAge   = (n) -> (p) -> person (n + p.age), p.name
+ageBy    = (n) -> (p) -> person (n + p.age), p.name
 addTitle = (t) -> (p) -> person p.age, (t + ' ' + p.name)
 ```
 
-Here I'm created the functions `addTitle` and `addAge`. Both of these functions return functions, which may seem a bit odd to some, but I did this for good reasons. I intend to create some even simpler helper functions with the help of these most complex ones. Let's see how that would look.
+Here I'm created the functions `addTitle` and `ageBy` which are functions that return other functions. This useful for when I want to age a `person` value by one year and don't want to hardcode the value `1`. The same notion applies to the addTitle function. I've even gone through the trouble to always return a new person when the returned function is invoked. That idea will be explained in more depth later, but the gist here is to use the more abstract functions to build simpler to compose functions.
 
-```coffescript
+```coffeescript
 addMr = addTitle 'Mr.'
-ageBy1 = addAge 1
+ageBy1 = ageBy 1
+```
+
+Here we have the functions `addMr` and `ageBy1`, which are simple functions that will compose the `person` in the system.
+
+```coffeescript
+jake = person 22, 'jake'
+
+# with variables
+mrJake = addMr jake
+olderMrJake = ageBy1 mrJake
+
+# or inlined
+ageBy1 (addMr jake)
+
+# or inlined this way
+addMr (ageBy1 jake)
+
 ```
 
 ___
