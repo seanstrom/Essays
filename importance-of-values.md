@@ -30,8 +30,8 @@ lowercase = (a) -> a.toLowerCase()
 The `add`, `first`, and `lowercase` functions are very simple, they all take in the values they need and return a value. Since these functions are that simple it's easy to compose them to build more functions.
 
 ```coffeescript
-abbreviate  = (a, b) -> add (shrinkFirst a), (shrinkFirst b)
 shrinkFirst = (a) -> lowercase (first a)
+abbreviate  = (a, b) -> add (shrinkFirst a), (shrinkFirst b)
 ```
 
 Composing functions with values is a very simple technique, but the simplicity carries a great amount of power when you start using more meaningful values. For example if we were to create our own value in the system, we can create functions that use that value as the contract between all the functions we want to compose.
@@ -52,7 +52,7 @@ ageBy    = (n) -> (p) -> person (n + p.age), p.name
 addTitle = (t) -> (p) -> person p.age, (t + ' ' + p.name)
 ```
 
-Here I'm created the functions `addTitle` and `ageBy` which are functions that return other functions. This useful for when I want to age a `person` value by one year and don't want to hardcode the value `1`. The same notion applies to the addTitle function. I've even gone through the trouble to always return a new person when the returned function is invoked. That idea will be explained in more depth later, but the gist here is to use the more abstract functions to build simpler to compose functions.
+Here I'm created the functions `addTitle` and `ageBy` which are functions that return other functions. This useful for when I want to age a `person` value by one year and don't want to hardcode the value `1`. The same notion applies to the `addTitle` function. I've even gone through the trouble to always return a new person when the returned function is invoked. That idea will be explained in more depth later, but the gist here is to use the more abstract functions to build simpler, composable functions.
 
 ```coffeescript
 addMr = addTitle 'Mr.'
