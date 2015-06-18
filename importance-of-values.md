@@ -48,7 +48,7 @@ Now we have defined our own type of value, which is a `person`, and we can creat
 Let's make some functions that can rely on a person value being passed in, and then returning a person value as well.
 
 ```coffeescript
-ageBy    = (n) -> (p) -> person (n + p.age), p.name
+ageBy    = (n) -> (p) -> person (add n, p.age), p.name
 addTitle = (t) -> (p) -> person p.age, "#{t} #{p.name}"
 ```
 
