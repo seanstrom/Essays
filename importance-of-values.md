@@ -49,7 +49,7 @@ Let's make some functions that can rely on a person value being passed in, and t
 
 ```coffeescript
 ageBy    = (n) -> (p) -> person (n + p.age), p.name
-addTitle = (t) -> (p) -> person p.age, (t + ' ' + p.name)
+addTitle = (t) -> (p) -> person p.age, "#{t} #{p.name}"
 ```
 
 Here I'm created the functions `addTitle` and `ageBy` which are functions that return other functions. This useful for when I want to age a `person` value by one year and don't want to hardcode the value `1`. The same notion applies to the `addTitle` function. I've even gone through the trouble to always return a new person when the returned function is invoked. That idea will be explained in more depth later, but the gist here is to use the more abstract functions to build simpler, composable functions.
