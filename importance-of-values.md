@@ -73,7 +73,13 @@ ageBy1 (addMr jake)
 
 # or inlined this way
 addMr (ageBy1 jake)
+```
 
+Now we've successfully built functions from functions, and then went on to use those functions to compose a person.
+In this case we've taken the person Jake and made them Mr. Jake who's now one year older. We can keep going by creating my and more functions base on what we've already shown.
+
+```coffeescript
+jake = person 22, 'jake'
 ```
 
 ___
