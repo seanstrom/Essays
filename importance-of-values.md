@@ -44,15 +44,17 @@ person = (age, name) ->
 jake = person 22, 'jake'
 ```
 
-Now we have defined our own type of value, which is a `person`, and we can created an example person Jake.
-Let's make some functions that can rely on a person value being passed in, and then returning a person value as well.
+Now we have defined our own type of value, which is a `person`, and we can created an example person `jake`.
+Let's start making some functions that can rely on a person value being passed in, and then returning a person value as well.
 
 ```coffeescript
-ageBy    = (n) -> (p) -> person (add n, p.age), p.name
+ageBy    = (y) -> (p) -> person (add y, p.age), p.name
 addTitle = (t) -> (p) -> person p.age, "#{t} #{p.name}"
 ```
 
-Here I'm created the functions `addTitle` and `ageBy` which are functions that return other functions. This useful for when I want to age a `person` value by one year and don't want to hardcode the value `1`. The same notion applies to the `addTitle` function. I've even gone through the trouble to always return a new person when the returned function is invoked. That idea will be explained in more depth later, but the gist here is to use the more abstract functions to build simpler, composable functions.
+Here I've created the functions `addTitle` and `ageBy` which are functions that return other functions.  
+This is useful for when I want to age a `person` value by one year and I don't want to hardcode the value `1`.  
+The same notion applies to the `addTitle` function. The concept can be explained in more depth, but the gist here is to use the more abstract functions to build simpler, composable functions.
 
 ```coffeescript
 addMr  = addTitle 'Mr.'
