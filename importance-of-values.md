@@ -52,16 +52,16 @@ ageBy    = (y) -> (p) -> person (add y, p.age), p.name
 addTitle = (t) -> (p) -> person p.age, "#{t} #{p.name}"
 ```
 
-Here I've created the functions `addTitle` and `ageBy` which are functions that return other functions.  
-This is useful for when I want to age a `person` value by one year and I don't want to hardcode the value `1`.  
-The same notion applies to the `addTitle` function. The concept can be explained in more depth, but the gist here is to use the more abstract functions to build simpler, composable functions.
+Here we've created the functions `addTitle` and `ageBy` which are functions that return other functions.  
+This is useful for when I want to set defaults for the composing functions that take in a `person` value.
+For example, if I wanted to age a `person` value by one year, and didn't want to hardcode into my function the number `1`. The same notion applies to the `addTitle` function. The concept can be explained in more depth, but the gist here is to use the more abstract functions to build simpler, composable functions.
 
 ```coffeescript
 addMr  = addTitle 'Mr.'
 ageBy1 = ageBy 1
 ```
 
-Here we have the functions `addMr` and `ageBy1`, which are simple functions that will compose the `person` in the system.
+Here we have the functions `addMr` and `ageBy1`, which are simple functions that will compose the `person` value in the system.
 
 ```coffeescript
 jake = person 22, 'jake'
@@ -77,12 +77,8 @@ ageBy1 (addMr jake)
 addMr (ageBy1 jake)
 ```
 
-Now we've successfully built functions from functions, and then went on to use those functions to compose a person.
-In this case we've taken the person Jake and made them Mr. Jake who's now one year older. We can keep going by creating my and more functions base on what we've already shown.
-
-```coffeescript
-jake = person 22, 'jake'
-```
+Now we've successfully built functions from functions, and then went on to use those functions to compose a `person` value. In this case we've taken the `person` value `jake` and made them "Mr. Jake", who's now also one year older.
+And this process can be build upon over and over again because we're simply using values to compose with our functions. Using this technique we're able to build many modular functions that are able to easily compose with one another, which in my opinion leads to more expressive and maintainable code. Though in one of the programs we right, we run into a situation where we no longer can compose our functions in the same way. That brick wall would be using asynchronous functions.
 
 ___
 
