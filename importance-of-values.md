@@ -78,7 +78,9 @@ addMr (ageBy1 jake)
 ```
 
 Now we've successfully built functions from functions, and then went on to use those functions to compose a `person` value. In this case we've taken the `person` value `jake` and made them "Mr. Jake", who's now also one year older.
-And this process can be build upon over and over again because we're simply using values to compose with our functions. Using this technique we're able to build many modular functions that are able to easily compose with one another, which in my opinion leads to more expressive and maintainable code. Though in many of the programs we write, we run into a situation where we no longer can compose our functions in the same way. That situation would be asynchronous programming.
+And this process can be build upon over and over again because we're simply using values to compose with our functions.
+
+Using this technique we're able to build many modular functions that are able to easily compose with one another, which in my opinion leads to more expressive and maintainable code. Though in many of the programs we write, we run into a situation where we no longer can compose our functions in the same way. That situation would be asynchronous programming.
 
 ## Async Functions
 
