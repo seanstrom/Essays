@@ -80,19 +80,29 @@ addMr (ageBy1 jake)
 Now we've successfully built functions from functions, and then went on to use those functions to compose a `person` value. In this case we've taken the `person` value `jake` and made them "Mr. Jake", who's now also one year older.
 And this process can be build upon over and over again because we're simply using values to compose with our functions. Using this technique we're able to build many modular functions that are able to easily compose with one another, which in my opinion leads to more expressive and maintainable code. Though in many of the programs we write, we run into a situation where we no longer can compose our functions in the same way. That situation would be asynchronous programming.
 
-## Asynchronous Programming - Callbacks
-___
+## Async Functions
 
-You could even begin to point out that this type of operation would be considered synchronous, meaning it doesn't do anything asynchronous. Well let's see some typical asynchronous code.
+So far I've gone over many examples of how and why we should be composing our values with functions, but all of those examples were just simple computations that didn't need to be asynchronous. When we have computations that should be asynchronous, like reading a file, then we're faced with a constraint that doesn't allow us to naturally compose with the asynchronous operation like we would above.
 
 ```coffeescript
 readFile './file', (err, data) ->
-  # do something with err and data
+  # do something with err and/or data
 ```
 
-This is pretty generic example of some callback code.
-We have a `readFile` function that takes in a path to a file as a string, and a function that will be corresponding the results of reading the file. As you can see the function we pass in is responsible for taking the `err` value and the `data` value. Now this may seem completely normal, but let's ask the question of:
-What should we expect the `readFile` function to return?
+Here we've introduced a rather simple example of some asynchronous code. The `readFile` function will take in a path to a file as a string, and take in a function that acts as the correspondent of the results. The reason we pass the function in is because readFile doesn't return a value that pertains to the operation it's performing. So we pass in a function that will be called with the results of reading file when finished. This pattern is commonly referred to as the Callback Pattern. To drive the point even more home lets show an example of trying to compose with the value of `readFile`.
+
+```coffeescript
+append  = (s) -> (f) -> "#{f}#{s}"
+prepend = (s) -> (f) -> "#{s}#{f}"
+```
+
+Now we have created the functions `append` and `prepend`, that both take in a string and then file data.
+Let's try to use these with `readFile`
+
+```coffeescript
+
+```
+
 Now technically we don't know what it should return, there's not really a standard on what it should return since what can it return? It's not going to have the values we care about so what would we expect from it, and if it did return something should we even care about it? My point ultimately here is that we've now stopped programming with functions always returning values because we started doing asynchronous work. Now the solution here isn't to start programming everything with synchronous operations, the asynchronous part here is good, we just want the asynchronous function to return a useful value. This is where I think Promises solve this problem fairly well. Instead of passing in all the arguments with a callback function, we just pass in all the arguments needed to perform the asynchronous operation.
 
 ```coffeescript
