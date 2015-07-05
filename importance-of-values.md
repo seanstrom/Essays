@@ -105,7 +105,7 @@ Let's try to use these with `readFile`
 
 ```
 
-Now technically we don't know what it should return, there's not really a standard on what it should return since what can it return? It's not going to have the values we care about so what would we expect from it, and if it did return something should we even care about it? My point ultimately here is that we've now stopped programming with functions always returning values because we started doing asynchronous work. Now the solution here isn't to start programming everything with synchronous operations, the asynchronous part here is good, we just want the asynchronous function to return a useful value. This is where I think Promises solve this problem fairly well. Instead of passing in all the arguments with a callback function, we just pass in all the arguments needed to perform the asynchronous operation.
+As we can see `readFile` doesn't return anything useful for our functions to compose with. Since the function is asynchronous it doesn't have the file data results yet and it needs a way for us to give it instructions for when the asynchronous task is finished. In this case we have to pass a callback function just to get the results back, which means we can't compose with the values the same way we did before. We're now forced to do all of our composing inside the body of the callback function. This is where I think Promises solve this problem fairly well. Instead of passing in all the arguments with a callback function, we just pass in all the arguments needed to perform the asynchronous operation.
 
 ```coffeescript
 pending = readFile './file'
@@ -114,8 +114,14 @@ pending
   .catch (err) -> # do something with err
 ```
 
-In this scenario we now just pass the path string to the `readFile` function. `readFile` will return a Promise because it's performing an asynchronous task. We then use the `.then` and `.catch` methods to access the Promises pending value when it is finished reading file. Now the most important take away here is that we're using the Promise type in our system as the value, or contract, between the asynchronous work and the consumer of the asynchronous work. And because Promises have a defined API and mechanics, we can assume and abstract over the way they work. We now can keep composing our functions, just like we would with synchronous code, but with asynchronous functions that rely on the Promise type. Being able to compose my functions this way is very important to me. I feel that having this high compose-ability leads to more modular code, that's easily kept decoupled by the boundaries of your returning values. Unfortunately you won't be able to achieve the same amount of power with using callbacks as your primary pattern.
-Callbacks code is limited by the fact that they don't have a way to state that the asynchronous functions are doing work that is pending. In order to convey this idea of pending work through the function we would need to introduce the concept of the asynchronous function, that does pending work, to return a pending value that corresponds to that pending work.
+In this scenario we now just pass the path string to the `readFile` function.  
+`readFile` will return a Promise because it's performing an asynchronous task.  
+We then use the `.then` and `.catch` methods to access the Promises pending value when it is finished reading file.   Now the most important take away here is that we're using the Promise type in our system as the value, or contract, between the asynchronous work and the consumer of the asynchronous work. And because Promises have a defined API and mechanics, we can assume and abstract over the way they work.
+
+We now can keep composing our functions, just like we would with synchronous code, but with asynchronous functions that rely on the Promise type. Being able to compose my functions this way is very important to me.  
+I feel that having this high compose-ability leads to more modular code, that's easily kept decoupled by the boundaries of your returning values. Unfortunately you won't be able to achieve the same amount of power with using callbacks as your primary pattern. Callbacks code is limited by the fact that they don't have a way to state that the asynchronous functions are doing work that is pending.
+
+In order to convey this idea of pending work through the function we would need to introduce the concept of the asynchronous function, that does pending work, to return a pending value that corresponds to that pending work.
 
 ```coffeescript
 pendingValue = readFile './file'
@@ -142,3 +148,8 @@ Notes:
 Pictures
 Code Samples
 Theme
+___
+NOTES
+
+I think we should be trying to focus more on how we're able to compose values with functions more.
+We should try to build more and more abstractions with brief explanations, and show why composing with values is very applicable for many programs. Then we should introduce how Asynchronous functions that use callbacks, contaminate that flow. Then show how promises are able to work within that flow because they're also values.
