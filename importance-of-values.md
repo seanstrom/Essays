@@ -7,9 +7,7 @@ template: essay.jade
 
 ![](http://4.bp.blogspot.com/_vt749aV4Y7Q/TQ0RGGCoOkI/AAAAAAAAFsA/fKNZwumM1fI/s1600/palace%2Bof%2Bzinn.jpg)
 
-In the last decade in the Kingdom of Javascript, much has happened around asynchronous programming.  
-Many prominent discussions have taken place and are still taking place around Promises and Callbacks.  
-However I feel that an important concept needs to be stated, or at very least restated.
+#### Redo this intro
 
 ## Using Values
 
@@ -102,7 +100,9 @@ Now we have created the functions `append` and `prepend`, that both take in a st
 Let's try to use these with `readFile`
 
 ```coffeescript
-
+file = readFile './file', (err, data) ->
+  # Do something err and data
+formattedFile = prepend 'Header', (append 'Footer', file)
 ```
 
 As we can see `readFile` doesn't return anything useful for our functions to compose with. Since the function is asynchronous it doesn't have the file data results yet and it needs a way for us to give it instructions for when the asynchronous task is finished. In this case we have to pass a callback function just to get the results back, which means we can't compose with the values the same way we did before. We're now forced to do all of our composing inside the body of the callback function. This is where I think Promises solve this problem fairly well. Instead of passing in all the arguments with a callback function, we just pass in all the arguments needed to perform the asynchronous operation.
