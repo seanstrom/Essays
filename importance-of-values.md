@@ -83,7 +83,7 @@ Now that we've seen how to use values to compose with our functions, let's look 
 
 ## Asynchronous Programming
 
-So far I've gone over many examples of how and why we should be composing our values with functions, but all of those examples were just simple computations. What if we have a computation that should be asynchronous, like reading a file, then we're faced with a constraint that doesn't allow us to naturally compose with the asynchronous function like we would above.
+So far I've gone over examples of how, and why, we should be composing our functions with values. Though all of those examples were just simple computations. What if we have a computation that should be asynchronous, like reading a file. Then we're faced with a constraint that doesn't allow us to naturally compose with the asynchronous function like we would above.
 
 ```coffeescript
 readFile './file', (err, data) ->
