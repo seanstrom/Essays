@@ -99,8 +99,8 @@ append  = (s) -> (f) -> "#{f}#{s}"
 prepend = (s) -> (f) -> "#{s}#{f}"
 ```
 
-Now we have created the functions `append` and `prepend`, that both take in a string and then file data.
-Let's try to use these with `readFile`
+Now we have created the functions `append` and `prepend`, that both take in a string and then file data.  
+Let's try to use these with `readFile`.
 
 ```coffeescript
 file = readFile './file', (err, data) ->
