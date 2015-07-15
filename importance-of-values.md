@@ -79,27 +79,30 @@ As you can we've built functions from functions and then went on to use those fu
 All we've done here so far is make small functions with a single responsibility, and compose them into larger functions that perform specific tasks. This is made possible because we've focused on creating functions that take in values and return a value.
 
 Though what happens when we can't return a value? Does such a scenario exist?  
-One particular situation comes to mind when asked these questions, Asynchronous Programming with the Callback Pattern.
+One particular situation comes to mind, which is Asynchronous Programming with the Callback Pattern.
 
-## Asynchronous Programming with Callback Pattern
+## Asynchronous Programming with the Callback Pattern
 
-So far I've gone over examples of how, and why, we should be composing our functions with values. Though all of those examples were just simple computations. What if we have a computation that should be asynchronous, like reading a file. Then we're faced with a constraint that doesn't allow us to naturally compose with the asynchronous function like we would above.
+Up until now we've gone over examples of how we can be composing our functions with values.  
+Though all of those examples were simple, synchronous computations. What if we have a computation that should be asynchronous, like reading a file. Then we're faced with a constraint that doesn't allow us to naturally compose with the asynchronous function like we would above.
 
 ```coffeescript
 readFile './file', (err, data) ->
   # logic
 ```
 
-Here we've introduced a rather simple example of some asynchronous code.  
-The `readFile` function will take in a path to a file as a string, and take in a function that acts as the correspondent of the results. The reason we pass the function in is because readFile doesn't return a value that pertains to the operation it's performing, so we pass in a function that will be called with the results of reading file when finished. This pattern is commonly referred to as the Callback Pattern.  
-Let's show an example of trying to compose with the `readFile`.
+Here we've introduced a rather simple example of some asynchronous callback code.  
+The `readFile` function will take in a path to a file as a string, and take in a function that acts as the correspondent of the results.
+
+The reason we pass the function in is because readFile doesn't return a value that pertains to the operation it's performing, so we pass in a function that will be called with the results of the read file when finished.  
+The main difference here is that `readFile` doesn't return anything and takes in a callback function as an argument.
 
 ```coffeescript
 append  = (s) -> (f) -> "#{f}#{s}"
 prepend = (s) -> (f) -> "#{s}#{f}"
 ```
 
-Now we have created the functions `append` and `prepend`, that both take in a string and then file data.  
+Here we've created the functions `append` and `prepend`, that both take in a string and then file data.  
 Let's try to use these with `readFile`.
 
 ```coffeescript
