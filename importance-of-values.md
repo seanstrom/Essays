@@ -92,41 +92,47 @@ readFile './file', (err, data) ->
 ```
 
 Here we've introduced a rather simple example of some asynchronous callback code.  
-The `readFile` function will take in a path to a file as a string, and take in a function that acts as the correspondent of the results.
-
-The reason we pass the function in is because readFile doesn't return a value that pertains to the operation it's performing, so we pass in a function that will be called with the results of the read file when finished.  
-The main difference here is that `readFile` doesn't return anything and takes in a callback function as an argument.
+The `readFile` function will take in a path to a file as a string, and take in a function that acts as the correspondent of the results. The reason we pass the function in is because `readFile` doesn't return a value, so we pass in a function that will be called with the results of the read file when finished.
 
 ```coffeescript
 append  = (s) -> (f) -> "#{f}#{s}"
 prepend = (s) -> (f) -> "#{s}#{f}"
+
+prependHeader = prepend 'Header'
+appendFooter = append 'Footer'
 ```
 
 Here we've created the functions `append` and `prepend`, that both take in a string and then file data.  
-Let's try to use these with `readFile`.
+We'll also create the `prependHeader` and `appendFooter` functions in order to compose with the file data.
+Now since the `readFile` function uses the Callback Pattern we can't compose our functions like we normally would.
 
 ```coffeescript
 file = readFile './file', (err, data) ->
   # logic
 # file == ???
 
-formattedFile = prepend 'Header', (append 'Footer', file)
+formattedFile = prependHeader appendFooter file
 # formattedFile == ???
 ```
 
-As we can see here we don't know what `readFile` returns.  
-When using the Callback Pattern we don't return anything or at least don't return anything useful. We solely rely on the passed in function to receive the results of the async operation. This unfortunately means we can't compose with the values the same way we did before. We're now forced to do all of our composing inside the body of the callback function.
+As we can see here `readFile` doesn't return anything.  
+We solely rely on the callback function to receive the results of the async operation.  
+This unfortunately means we can't compose with the values the same way we did before.  
+Now we're forced to do all of our composition inside the body of the callback function.
 
 ```
 readFile './file', (err, data) ->
-  formattedFile = prepend 'Header', (append 'Footer', data)
-```
+  formattedFile = prependHeader appendFooter data
+``` 
 
-The problem that arises from using this style, for handling asynchronous values, is that now we're conforming all async functions to handle the way they unwrap an asynchronous operation. By that I mean when we call `readFile` we are starting an asynchronous operation, and because its async we can't return the results. So instead we decided to make the `readFile` function wait for the asynchronous operation to finish, and then call the callback function.
-The calling of the callback function is the unwrapping of the async operation, which is fine, but readFile shouldn't be responsible for representing the logic of reading a file and the unwrapping of the asynchronous operation.
-Instead we should want an Abstraction that can represent a asynchronous value. That way we can return that value from `readFile` and let other functions compose of that value.
+The issue that can be seen here is that now we have functions that don't return values, and we need to pass in a function just to receive the values. Because of these conditions we're not allowed to compose our functions from the return values, and have to compose through the callback chain. The downside there are two things:
 
-### Promises
+1. The Callback Pattern structures our code in a way that builds up cyclomatic complexity. We are more or less trying in a situation where the more we do in each callback, the more context we need to keep track of in your head.
+2. We end up making the asynchronous function responsible for its computation, and how it should be passing along the values from the asynchronous operation.
+
+We should prefer an abstraction that allows us to return aynchronous values, and have our functions only worry about that their computation returns the correct value.
+
+### Asynchronous Programming with Promises
 Promises do exactly as we've described, they represent the pending value from the asynchronous operation.
 
 ```coffeescript
