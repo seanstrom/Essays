@@ -11,7 +11,7 @@ template: essay.jade
 
 ## Using Values
 
-In an ideal system, my workflow would consist of composing together functions with values and these values would serve as the contracts between all of my code. For example, code that would normally perform operations like: 
+In an ideal system my workflow would consist of composing together functions with values, and these values would serve as the contracts between all of my code. For example, code that would normally perform operations like: 
 
 * adding numbers
 * manipulating strings
@@ -32,7 +32,8 @@ shrinkFirst = (a) -> lowercase (first a)
 abbreviate  = (a, b) -> add (shrinkFirst a), (shrinkFirst b)
 ```
 
-Composing functions with values is a very simple technique, but the simplicity carries a great amount of power when you start using more meaningful values. For example if we were to create our own value in the system, then we can create functions that use the value as the contract between all the functions we want to compose with.
+Here we've taken our simple functions and composed into more functions.  
+Composing functions is a simple technique, but the simplicity carries a great amount of power when you start using more meaningful values. For example if we were to create our own value in the system, then we can create functions that use the value as the contract between each other.
 
 ```coffeescript
 person = (age, name) ->
@@ -42,17 +43,16 @@ person = (age, name) ->
 jake = person 22, 'jake'
 ```
 
-Now we have defined our own type of value, which is a `person`, and we can created an example person `jake`.  
-Let's start making some functions that can rely on a `person` value being passed in, and then returning a `person` value as well.
+Now we have defined our own type of value, `person`, and we can created an example `person` named `jake`.  
+We can now begin to create functions that rely on a `person` value being passed in, and then returning a `person` value as well.
 
 ```coffeescript
 ageBy    = (y) -> (p) -> person (add y, p.age), p.name
 addTitle = (t) -> (p) -> person p.age, "#{t} #{p.name}"
 ```
 
-Here we've created the functions `ageBy` and `addTitle` which are functions that return other functions.  
-This is useful for when I want to set defaults for the composing functions that take in a `person` value.
-For example, if I wanted to age a `person` by one year, and didn't want to hardcode into my function the number `1`. The same notion applies to the `addTitle` function. The concept can be explained in more depth, but the gist here is to use the more abstract functions to build simpler, composable functions.
+Here we've created the functions `ageBy` and `addTitle` which are functions that return functions.
+This is useful since we want to create a generic functions for a `person` value, but don't want to hardcode minor details like number of years or titles. Instead the functions will take in those minor details as arguments, and then return a function that will take in a person value. This concept can be explained in more depth, but the gist here is to use the more abstract functions to build functions that will easily compose with the `person` value.
 
 ```coffeescript
 addMr  = addTitle 'Mr.'
@@ -75,13 +75,13 @@ ageBy1 (addMr jake)
 addMr (ageBy1 jake)
 ```
 
-Now we've successfully built functions from functions, and then went on to use those functions to compose a `person` value. In this case we've taken the `person` `jake` and made them "Mr. Jake", who's now also one year older.
-This process can be built upon over and over again because we're simply using values to compose with our functions.  
-Using this technique we're able to build many modular functions that are able to easily compose with one another, which in my opinion leads to more expressive and maintainable code.
+As you can we've built functions from functions and then went on to use those functions to compose into `person` value. In this case we've taken `jake` and made the name "Mr. Jake", and increased the age by one year.  
+All we've done here so far is make small functions with a single responsibility, and compose them into larger functions that perform specific tasks. This is made possible because we've focused on creating functions that take in values and return a value.
 
-Now that we've seen how to use values to compose with our functions, let's look at ways where we'll have problems applying these principles.
+Though what happens when we can't return a value? Does such a scenario exist?  
+One particular situation comes to mind when asked these questions, Asynchronous Programming with the Callback Pattern.
 
-## Asynchronous Programming
+## Asynchronous Programming with Callback Pattern
 
 So far I've gone over examples of how, and why, we should be composing our functions with values. Though all of those examples were just simple computations. What if we have a computation that should be asynchronous, like reading a file. Then we're faced with a constraint that doesn't allow us to naturally compose with the asynchronous function like we would above.
 
