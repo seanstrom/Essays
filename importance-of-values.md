@@ -83,14 +83,16 @@ Now that we've seen how to use values to compose with our functions, let's look 
 
 ## Asynchronous Programming
 
-So far I've gone over many examples of how and why we should be composing our values with functions, but all of those examples were just simple computations that didn't need to be asynchronous. When we have computations that should be asynchronous, like reading a file, then we're faced with a constraint that doesn't allow us to naturally compose with the asynchronous operation like we would above.
+So far I've gone over many examples of how and why we should be composing our values with functions, but all of those examples were just simple computations. What if we have a computation that should be asynchronous, like reading a file, then we're faced with a constraint that doesn't allow us to naturally compose with the asynchronous function like we would above.
 
 ```coffeescript
 readFile './file', (err, data) ->
-  # do something with err and/or data
+  # logic
 ```
 
-Here we've introduced a rather simple example of some asynchronous code. The `readFile` function will take in a path to a file as a string, and take in a function that acts as the correspondent of the results. The reason we pass the function in is because readFile doesn't return a value that pertains to the operation it's performing. So we pass in a function that will be called with the results of reading file when finished. This pattern is commonly referred to as the Callback Pattern. To drive the point even more home lets show an example of trying to compose with the value of `readFile`.
+Here we've introduced a rather simple example of some asynchronous code.  
+The `readFile` function will take in a path to a file as a string, and take in a function that acts as the correspondent of the results. The reason we pass the function in is because readFile doesn't return a value that pertains to the operation it's performing, so we pass in a function that will be called with the results of reading file when finished. This pattern is commonly referred to as the Callback Pattern.  
+Let's show an example of trying to compose with the `readFile`.
 
 ```coffeescript
 append  = (s) -> (f) -> "#{f}#{s}"
@@ -102,11 +104,27 @@ Let's try to use these with `readFile`
 
 ```coffeescript
 file = readFile './file', (err, data) ->
-  # Do something err and data
+  # logic
+# file == ???
+
 formattedFile = prepend 'Header', (append 'Footer', file)
+# formattedFile == ???
 ```
 
-As we can see `readFile` doesn't return anything useful for our functions to compose with. Since the function is asynchronous it doesn't have the file data results yet and it needs a way for us to give it instructions for when the asynchronous task is finished. In this case we have to pass a callback function just to get the results back, which means we can't compose with the values the same way we did before. We're now forced to do all of our composing inside the body of the callback function. This is where I think Promises solve this problem fairly well. Instead of passing in all the arguments with a callback function, we just pass in all the arguments needed to perform the asynchronous operation.
+As we can see here we don't know what `readFile` returns.  
+When using the Callback Pattern we don't return anything or at least don't return anything useful. We solely rely on the passed in function to receive the results of the async operation. This unfortunately means we can't compose with the values the same way we did before. We're now forced to do all of our composing inside the body of the callback function.
+
+```
+readFile './file', (err, data) ->
+  formattedFile = prepend 'Header', (append 'Footer', data)
+```
+
+The problem that arises from using this style, for handling asynchronous values, is that now we're conforming all async functions to handle the way they unwrap an asynchronous operation. By that I mean when we call `readFile` we are starting an asynchronous operation, and because its async we can't return the results. So instead we decided to make the `readFile` function wait for the asynchronous operation to finish, and then call the callback function.
+The calling of the callback function is the unwrapping of the async operation, which is fine, but readFile shouldn't be responsible for representing the logic of reading a file and the unwrapping of the asynchronous operation.
+Instead we should want an Abstraction that can represent a asynchronous value. That way we can return that value from `readFile` and let other functions compose of that value.
+
+### Promises
+Promises do exactly as we've described, they represent the pending value from the asynchronous operation.
 
 ```coffeescript
 pending = readFile './file'
@@ -122,28 +140,7 @@ We then use the `.then` and `.catch` methods to access the Promises pending valu
 We now can keep composing our functions, just like we would with synchronous code, but with asynchronous functions that rely on the Promise type. Being able to compose my functions this way is very important to me.  
 I feel that having this high compose-ability leads to more modular code, that's easily kept decoupled by the boundaries of your returning values. Unfortunately you won't be able to achieve the same amount of power with using callbacks as your primary pattern. Callbacks code is limited by the fact that they don't have a way to state that the asynchronous functions are doing work that is pending.
 
-In order to convey this idea of pending work through the function we would need to introduce the concept of the asynchronous function, that does pending work, to return a pending value that corresponds to that pending work.
-
-```coffeescript
-pendingValue = readFile './file'
-pendingValue.done (err, data) ->
-  # do something with err and data
-```
-
-Which hypothetically will work, but all I've done in this case is decided to use a different type to represent the value, rather than a Promise. Which I think is totally fine, in fact there are other constructs that you can use to do this, Streams for example.
-
-```coffeescript
-file = readFile './file'
-file.map (data) -> # do something with data
-file.errors (err, push) -> # do something with err
-```
-** Stream API courtesy of Highland.js
-
-In this scenario the `readFile` function returns a stream, we then use that the Stream value as the contract between me and the function, and then I use the API defined by the Stream type to access the values. Which still fits within the constraint of having my functions always returning values, and when I want to compose my asynchronous functions, I can use the Stream type as the contract between all my functions as well.
-
-Now at this point my main philosophy, as you can tell, is to encourage myself and others to really focus on using values as the contract between my functions, with that we achieve a greater amount of compose-ability and in IMO easier to maintain and test code.
-
-Thanks.
+### Redo Outro
 
 Notes:
 Pictures
