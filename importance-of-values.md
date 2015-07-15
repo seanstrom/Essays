@@ -42,7 +42,7 @@ person = (age, name) ->
 jake = person 22, 'jake'
 ```
 
-Now we have defined our own type of value, which is a `person`, and we can created an example person `jake`.
+Now we have defined our own type of value, which is a `person`, and we can created an example person `jake`.  
 Let's start making some functions that can rely on a `person` value being passed in, and then returning a `person` value as well.
 
 ```coffeescript
