@@ -9,7 +9,7 @@ template: essay.jade
 
 #### Redo this intro
 
-## Using Values
+### Using Values
 
 In an ideal system my workflow would consist of composing together functions with values, and these values would serve as the contracts between all of my code. For example, code that would normally perform operations like: 
 
@@ -81,7 +81,7 @@ All we've done here so far is make small functions with a single responsibility,
 Though what happens when we can't return a value? Does such a scenario exist?  
 One particular situation comes to mind, which is Asynchronous Programming with the Callback Pattern.
 
-## Asynchronous Programming with the Callback Pattern
+### Asynchronous Programming with the Callback Pattern
 
 Up until now we've gone over examples of how we can be composing our functions with values.  
 Though all of those examples were simple, synchronous computations. What if we have a computation that should be asynchronous, like reading a file. Then we're faced with a constraint that doesn't allow us to naturally compose with the asynchronous function like we would above.
