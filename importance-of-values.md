@@ -25,15 +25,14 @@ first     = (a) -> a[0]
 lowercase = (a) -> a.toLowerCase()
 ```
 
-The `add`, `first`, and `lowercase` functions are very simple, they all take in the values they need and return a value. Since these functions are that simple it's easy to compose them to build more functions.
+The `add`, `first`, and `lowercase` functions are very simple, they all take in the values they need and return a value. Since these functions are that simple, it's easy to compose them to build more functions.
 
 ```coffeescript
 shrinkFirst = (a) -> lowercase (first a)
 abbreviate  = (a, b) -> add (shrinkFirst a), (shrinkFirst b)
 ```
 
-Here we've taken our simple functions and composed into more functions.  
-Composing functions is a simple technique, but the simplicity carries a great amount of power when you start using more meaningful values. For example if we were to create our own value in the system, then we can create functions that use the value as the contract between each other.
+Here we've taken our simple functions and composed them into more functions. Composing functions is a simple technique, but the simplicity carries a great amount of power when you start using more meaningful values. For example if we were to create our own value in the system, then we can create functions that use the value as the contract between each other.
 
 ```coffeescript
 person = (age, name) ->
@@ -84,56 +83,56 @@ One particular situation comes to mind, which is Asynchronous Programming with t
 ### Asynchronous Programming with the Callback Pattern
 
 Up until now we've gone over examples of how we can be composing our functions with values.  
-Though all of those examples were simple, synchronous computations. What if we have a computation that should be asynchronous, like reading a file. Then we're faced with a constraint that doesn't allow us to naturally compose with the asynchronous function like we would above.
+Though all of those examples were simple, synchronous operations. What if we have a operation that should be asynchronous, like reading a file. If that's the case then we're faced with a constraint that limits the ways we can compose our functions.
 
 ```coffeescript
 readFile './file', (err, data) ->
   # logic
 ```
 
-Here we've introduced a rather simple example of some asynchronous callback code.  
-The `readFile` function will take in a path to a file as a string, and take in a function that acts as the correspondent of the results. The reason we pass the function in is because `readFile` doesn't return a value, so we pass in a function that will be called with the results of the read file when finished.
+Here we've introduced a rather simple example of some asynchronous callback code. The `readFile` function will take in a path to a file as a string, and take in a function that acts as the correspondent of the results.  
+
+The reason we pass the function in is because `readFile` doesn't return a value, since it's asynchronous and won't have the results to return. Instead we pass in a function that will be called with the results of the read file when finished.
 
 ```coffeescript
 append  = (s) -> (f) -> "#{f}#{s}"
 prepend = (s) -> (f) -> "#{s}#{f}"
 
-prependHeader = prepend 'Header'
 appendFooter = append 'Footer'
+prependHeader = prepend 'Header'
 ```
 
-Here we've created the functions `append` and `prepend`, that both take in a string and then file data.  
-We'll also create the `prependHeader` and `appendFooter` functions in order to compose with the file data.  
-Now since the `readFile` function uses the Callback Pattern we can't compose our functions like we normally would.
+Here we've created the functions `append` and `prepend`, that both take in a string and then file data. We'll also create the `prependHeader` and `appendFooter` functions for convenience. Okay time to compose our functions. How do we do that? Well since the `readFile` function uses the Callback Pattern we can't compose the same way as before. Or else this happens.
 
 ```coffeescript
 file = readFile './file', (err, data) ->
   # logic
 # file == ???
 
-formattedFile = prependHeader appendFooter file
+formattedFile = prependHeader (appendFooter file)
 # formattedFile == ???
 ```
 
-As we can see here `readFile` doesn't return anything.  
-We solely rely on the callback function to receive the results of the async operation.  
-This unfortunately means we can't compose with the values the same way we did before.  
-Now we're forced to do all of our composition inside the body of the callback function.
+As we've mentioned already, `readFile` doesn't return anything.  
+We solely need to rely on the callback function to receive the results of the asynchronous operation. With that constraint we're forced to do all of our composition inside the body of the callback function.
 
 ```
 readFile './file', (err, data) ->
-  formattedFile = prependHeader appendFooter data
-``` 
+  formattedFile = prependHeader (appendFooter data)
+``` then return the correct value
 
-The issue that can be seen here is that now we have functions that don't return values, and we need to pass in a function just to receive the values. Because of these conditions we're not allowed to compose our functions from the return values, and have to compose through the callback chain. The downside there are two things:
+There's a few issues that we should have with this code:
 
-1. The Callback Pattern structures our code in a way that builds up cyclomatic complexity. We are more or less trying in a situation where the more we do in each callback, the more context we need to keep track of in your head.
-2. We end up making the asynchronous function responsible for its computation, and how it should be passing along the values from the asynchronous operation.
+1. `readFile` doesn't return anything. So far we've derived a lot of power from composing together functions. When we have a function that doesn't return anything we essentially through a monkey wrench into environment. Now we have to tip-toe around the fact that we have special functions in the system.
 
-We should prefer an abstraction that allows us to return aynchronous values, and have our functions only worry about that their computation returns the correct value.
+2. We're conflating the way we're handling the asynchronous operation with the input of the function. Normally the arguments we would be used in context for the operation, in this case the callback is being used to deliver the results.
+
+We should prefer an abstraction that allows us to return aynchronous values. This way our functions will worry about their computations, while returning a value that represents the operation. 
 
 ### Asynchronous Programming with Promises
-Promises do exactly as we've described, they represent the pending value from the asynchronous operation.
+
+When considering the use of an asynchronous abstraction, like we've, described above, there's a popular concept that comes to mind. **Promises**.
+Promises will do exactly as we've described. They'll represent the pending value from an asynchronous operation.
 
 ```coffeescript
 pending = readFile './file'
@@ -142,11 +141,40 @@ pending
   .catch (err) -> # do something with err
 ```
 
-In this scenario we now just pass the path string to the `readFile` function.  
-`readFile` will return a Promise because it's performing an asynchronous task.  
-We then use the `.then` and `.catch` methods to access the Promises pending value when it is finished reading file.   Now the most important take away here is that we're using the Promise type in our system as the value, or contract, between the asynchronous work and the consumer of the asynchronous work. And because Promises have a defined API and mechanics, we can assume and abstract over the way they work.
+Now we've defined `readFile` to be a function that returns a `Promise`, or a pending value. So the only arguments it takes in is the file path. Once given the file path, `readfile` returns a pending value, and when finished it will contain the file data results. We then go one to use methods on the Promise value to access the results of the operation.
 
-We now can keep composing our functions, just like we would with synchronous code, but with asynchronous functions that rely on the Promise type. Being able to compose my functions this way is very important to me.  
+Now the most important part here is that we're using the Promise value in our system as the contract, between the asynchronous work and the consumer of the asynchronous work. And because Promises have a defined API and mechanics, we can assume and abstract over the way they work.
+At this point we can go back to defining functions that take in values and return a value, this time with Promises.
+
+```coffeescript
+promise = readFile './file'
+promise
+  .then (file) -> prependHeader (appendFooter file)
+  .then (formattedFile) -> # do something with formattedFile
+```
+
+Here's one example of just using the `then` method to pass the results to our original `appendFooter` and `prependHeader` functions.
+
+```coffeescript
+promise
+  .then appendFooter
+  .then prependHeader
+```
+
+Here's another version of using the promise value to chain together transformations on the file data.
+
+```coffeescript
+formatFile = (file) -> prependHeader (appendFooter file)
+formatFileAsync = (promise) -> promise.then formatFile
+```
+
+Another version where we define to functions, one for unwrapping the Promise value with the `then` method, and another function that takes in the file data and performs the transformations.
+
+```coffeescript
+promise = readFile './file'
+```
+
+We now can keep composing our functions, just like we would with synchronous code, but with asynchronous functions that rely on the Promise value. Being able to compose my functions this way is very important to me.  
 I feel that having this high compose-ability leads to more modular code, that's easily kept decoupled by the boundaries of your returning values. Unfortunately you won't be able to achieve the same amount of power with using callbacks as your primary pattern. Callbacks code is limited by the fact that they don't have a way to state that the asynchronous functions are doing work that is pending.
 
 ### Redo Outro
