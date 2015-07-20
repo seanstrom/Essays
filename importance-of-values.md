@@ -171,20 +171,17 @@ formatFileAsync = (promise) -> promise.then formatFile
 Another version where we define to functions, one for unwrapping the Promise value with the `then` method, and another function that takes in the file data and performs the transformations.
 
 ```coffeescript
-promise = readFile './file'
+readFormat = (path) ->
+  promise = readFile path
+  formatFileAsync promise
+promise = readFormat './file'
+promise.then (formattedFile) -> # do something with formattedFile
 ```
 
-We now can keep composing our functions, just like we would with synchronous code, but with asynchronous functions that rely on the Promise value. Being able to compose my functions this way is very important to me.  
-I feel that having this high compose-ability leads to more modular code, that's easily kept decoupled by the boundaries of your returning values. Unfortunately you won't be able to achieve the same amount of power with using callbacks as your primary pattern. Callbacks code is limited by the fact that they don't have a way to state that the asynchronous functions are doing work that is pending.
+And finally in this example we compose with the Promise value in order to create the new asynchronous function `readFormat`. All together when use Promises as the return value of from our asynchronous functions, we're allowed the same kind of composition between our functions.
+
+### Values are Important
+
+Now the point here isn't necessarily "Use Promises", but more so "Use Values". Promises are one way of getting the job done here. We could easily use streams or some other value to represent what we've shown. And that would be the primary point. When you're able to represent pieces of your system as values, you're able to compose with those values. In the case of asynchronous operations, we're able to represent them as Promises.
 
 ### Redo Outro
-
-Notes:
-Pictures
-Code Samples
-Theme
-___
-NOTES
-
-I think we should be trying to focus more on how we're able to compose values with functions more.
-We should try to build more and more abstractions with brief explanations, and show why composing with values is very applicable for many programs. Then we should introduce how Asynchronous functions that use callbacks, contaminate that flow. Then show how promises are able to work within that flow because they're also values.
