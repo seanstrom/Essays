@@ -103,7 +103,7 @@ appendFooter = append 'Footer'
 ```
 
 Here we've created the functions `append` and `prepend`, that both take in a string and then file data.  
-We'll also create the `prependHeader` and `appendFooter` functions in order to compose with the file data.
+We'll also create the `prependHeader` and `appendFooter` functions in order to compose with the file data.  
 Now since the `readFile` function uses the Callback Pattern we can't compose our functions like we normally would.
 
 ```coffeescript
