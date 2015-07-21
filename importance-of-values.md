@@ -18,7 +18,7 @@ For example, code that would normally perform operations like:
 * manipulating strings
 * iterating over data
 
-can now be be modeled as functions.
+would now be be modeled as functions.
 
 ```coffeescript
 add       = (a, b) -> a + b
@@ -139,7 +139,7 @@ We should prefer an abstraction that allows us to return aynchronous values. Thi
 
 ### Meet our Pending Value
 
-Luckily in our case we already know how an existing abstraction that is used as the pending value, it's commonly referred to as a Promise. We can now use the Promise value as a way to compose together our asynchronous operations with our synchronous ones.
+In our case we already know of an existing abstraction that is used as the pending value, it's commonly referred to as a **Promise**. Which means we can begin to use the Promise value as a way to compose together our asynchronous operations with our synchronous ones.
 
 ```coffeescript
 pending = readFile './file'
@@ -148,10 +148,9 @@ pending
   .catch (err) -> # do something with err
 ```
 
-Now we've redefined `readFile` to be a function that returns a `Promise`, or a pending value. So the only arguments it takes in is the file path. Once given the file path, `readfile` returns a pending value, and when finished it will contain the file data results. We then go one to use methods on the Promise value to access the results of the operation.
+First we'll redefine `readFile` to be a function that returns a pending value, or a **Promise**. Which makes the only arguments it takes in the file path. Once given the file path, `readfile` will return a **Promise**. Then when the operation is finished it will contain the file data. We then go one to use methods on the Promise value to access the results of the operation.
 
-Now the most important part here is that we're using the Promise value in our system as the contract, between the asynchronous work and the consumer of the asynchronous work. And because Promises have a defined API and mechanics, we can assume and abstract over the way they work.
-At this point we can go back to defining functions that take in values and return a value, this time with Promises.
+Now the important part here is that we're using **Promises** as the contract between the asynchronous work and the consumer of the asynchronous work. At this point we can go back to defining functions that take in values and return a value, this time with **Promises**.
 
 ```coffeescript
 promise = readFile './file'
@@ -168,14 +167,14 @@ promise
   .then prependHeader
 ```
 
-Here's another version of using the promise value to chain together transformations on the file data.
+And another version of using the **Promise** value to chain together transformations on the file data.
 
 ```coffeescript
 formatFile = (file) -> prependHeader (appendFooter file)
 formatFileAsync = (promise) -> promise.then formatFile
 ```
 
-Another version where we define to functions, one for unwrapping the Promise value with the `then` method, and another function that takes in the file data and performs the transformations.
+Another version where we define two functions. One for unwrapping the **Promise** value with the `then` method, and another function that takes in the file data and performs the transformations.
 
 ```coffeescript
 readFormat = (path) ->
@@ -185,10 +184,12 @@ promise = readFormat './file'
 promise.then (formattedFile) -> # do something with formattedFile
 ```
 
-And finally in this example we compose with the Promise value in order to create the new asynchronous function `readFormat`. All together when use Promises as the return value of from our asynchronous functions, we're allowed the same kind of composition between our functions.
+And finally in this example we compose with the **Promise** value in order to create the new asynchronous function `readFormat`. `readFormat` takes in a path and calls `readFile` with that path. We go on to compose with the **Promise** returned from `readFile` with the function `formatFileAsync`.
 
 ### Values are Important
 
-Now the point here isn't necessarily "Use Promises", but more so "Use Values". Promises are one way of getting the job done here. We could easily use streams or some other value to represent what we've shown. And that would be the primary point. When you're able to represent pieces of your system as values, you're able to compose with those values. In the case of asynchronous operations, we're able to represent them as Promises.
+Now the point here isn't necessarily "Use Promises", but more so "Use Values".  
+Promises are just one mechanism for accomplishing the same function composition we want to see from asynchronous functions. We could easily use **Streams**, or some other value, to represent the Pending Value in our system. And that should be the primary take away here, when you're able to represent pieces of your system as values, you're able to compose with those values. In the case of asynchronous operations, we're able to represent them as Promises.
+With Promises we're able to achieve the same kind of composition between our functions.
 
 ### Redo Outro
