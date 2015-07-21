@@ -7,8 +7,6 @@ template: essay.jade
 
 ![](http://4.bp.blogspot.com/_vt749aV4Y7Q/TQ0RGGCoOkI/AAAAAAAAFsA/fKNZwumM1fI/s1600/palace%2Bof%2Bzinn.jpg)
 
-#### Redo this intro
-
 ### The Grid
 
 In an ideal system, our workflow would consist of composing together functions.  
