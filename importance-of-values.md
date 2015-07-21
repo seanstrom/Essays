@@ -123,17 +123,17 @@ readFile './file', (err, data) ->
 
 Now this may not like a bad thing at first, but here's a few things we should consider about this code.
 
-##### What does our function take?
+#### What does our function take?
 We're conflating two things in the function arguments, which are the arguments needed for the computation, as well as the mechanism used for "unwrapping" the asynchronous operation. We're essentially exposing how we're handling the delivery of the asynchronous results through the function arguments instead of through the return value.
 
-**Note**  
-We use term "unwrapping" to depict that the asynchronous operation is a package that contains the results of operation, and we "unwrap" it by waiting until the operation is finished and having the passed in function called with those results
+###### Note
+We use the term "unwrapping" to depict that the asynchronous operation is a package that contains the results of operation, and we "unwrap" it by waiting until the operation is finished and having the passed in function called with those results
 
-##### What does our function give?
+#### What does our function give?
 So far we've derived a lot of power from composing together functions that return values.  
 When we have functions that don't return anything, we've essentially thrown a monkey wrench into our function composition. And then we're in a situation where we have two kinds of functions and have to tip-toe around the asynchronous functions, which we should avoid.
 
-##### Conclusion
+#### Conclusion
 We should prefer an abstraction that allows us to return aynchronous values. This way our asynchronous functions perform their computations and just return a value that represents the pending operation.
 
 
