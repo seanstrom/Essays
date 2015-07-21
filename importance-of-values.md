@@ -9,7 +9,7 @@ template: essay.jade
 
 #### Redo this intro
 
-### The System
+### The Grid
 
 In an ideal system, our workflow would consist of composing together functions.  
 For example, code that would normally perform operations like: 
@@ -81,7 +81,7 @@ Of course the composition doesn't stop there, for brevity's sake we'll stop here
 Though there exists a few problems in our system...
 
 
-### The Villain: The Non-Value Returning Function
+### Villain: Darth Non-Value Returning Function
 
 Up until now we've gone over examples of how we can compose our functions with values.  
 Though all of those examples were simple, synchronous operations. What if we have a operation that should be asynchronous, like reading a file. If that's the case then we're faced with a constraint that limits the ways we can compose our functions.
@@ -139,7 +139,7 @@ When we have functions that don't return anything, we've essentially thrown a mo
 We should prefer an abstraction that allows us to return aynchronous values. This way our asynchronous functions perform their computations and just return a value that represents the pending operation.
 
 
-### Our Hero: The Pending Value
+### Hero: Cpt. Pending Value
 
 In our case we already know of an existing abstraction that is used as the pending value, it's commonly referred to as a **Promise**. Which means we can begin to use the Promise value as a way to compose together our asynchronous operations with our synchronous ones.
 
