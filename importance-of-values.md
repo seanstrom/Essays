@@ -9,7 +9,7 @@ template: essay.jade
 
 #### Redo this intro
 
-### Composition
+### Sub Header
 
 In an ideal system, our workflow would consist of composing together functions.  
 For example, code that would normally perform operations like: 
