@@ -189,10 +189,13 @@ promise.then (formattedFile) -> # do something with formattedFile
 And finally in this example we compose with the **Promise** value in order to create the new asynchronous function `readFormat`. `readFormat` takes in a path and calls `readFile` with that path. We go on to compose with the **Promise** returned from `readFile` with the function `formatFileAsync`.
 
 
-### Values are Important
+### The Message: Values are Important
 
 Now the point here isn't necessarily "Use Promises", but more so "Use Values".  
-Promises are just one mechanism for accomplishing the same function composition we want to see from asynchronous functions. We could easily use **Streams**, or some other value, to represent the Pending Value in our system. And that should be the primary take away here, when you're able to represent pieces of your system as values, you're able to compose with those values. In the case of asynchronous operations, we're able to represent them as Promises.
+Promises are just one mechanism for accomplishing what we want to see from asynchronous functions.  
+We could easily use other mechanisms like **Streams** to represent the pending value.  
+
+The message here is that when you're able to represent pieces of your system as values, you're able to compose with those values. In the case of asynchronous operations, we're able to represent them as Promises.
 With Promises we're able to achieve the same kind of composition between our functions.
 
 #### Redo Outro
