@@ -129,7 +129,7 @@ We're conflating two things in the function arguments, which are the arguments n
 **Note**  
 We use term "unwrapping" to depict that the asynchronous operation is a package that contains the results of operation, and we "unwrap" it by waiting until the operation is finished and having the passed in function called with those results
 
-##### What does our function give back?
+##### What does our function give?
 So far we've derived a lot of power from composing together functions that return values.  
 When we have functions that don't return anything, we've essentially thrown a monkey wrench into our function composition. And then we're in a situation where we have two kinds of functions and have to tip-toe around the asynchronous functions, which we should avoid.
 
