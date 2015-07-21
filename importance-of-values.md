@@ -7,7 +7,7 @@ template: essay.jade
 
 ![](http://4.bp.blogspot.com/_vt749aV4Y7Q/TQ0RGGCoOkI/AAAAAAAAFsA/fKNZwumM1fI/s1600/palace%2Bof%2Bzinn.jpg)
 
-### The Grid
+### The System
 
 In an ideal system, our workflow would consist of composing together functions.  
 For example, code that would normally perform operations like: 
