@@ -54,7 +54,7 @@ ageBy1 = ageBy 1
 addTitleInd  = addTitle 'Ind.'
 ```
 
-We start off by defining the functions `ageBy` and `addTitle`, which are functions that return functions (Higher Order Functions). This is useful since we want to partially apply some generic functions, and then pass in a `person` value. In this case we've created a generic aging function, and generic title adding function. We go on to use these functions to build even more functions, and these functions will directly compose with the `person` value.
+We start off by defining the functions `ageBy` and `addTitle`, which are functions that return functions. This is useful since we want to partially apply some generic functions, and then pass in a `person` value. In this case we've created a generic aging function, and generic title adding function. We go on to use these functions to build even more functions, and these functions will directly compose with the `person` value.
 
 ```coffeescript
 jake = person 22, 'jake'
