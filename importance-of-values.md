@@ -78,6 +78,7 @@ Of course the composition doesn't stop there, for brevity's sake we'll stop here
 
 Though there exists a few problems in our system...
 
+___
 
 ### The Non-Value Returning Function
 
@@ -126,7 +127,7 @@ Now this may not like a bad thing at first, but here's a few things we should co
 #### What does our function take?
 We're conflating two things in the function arguments, which are the arguments needed for the computation, as well as the mechanism used for "unwrapping" the asynchronous operation. We're essentially exposing how we're handling the delivery of the asynchronous results through the function arguments instead of through the return value.
 
-###### Note
+**Note**  
 We use the term "unwrapping" to depict that the asynchronous operation is a package that contains the results of operation, and we "unwrap" it by waiting until the operation is finished and having the passed in function called with those results
 
 #### What does our function give?
@@ -136,6 +137,7 @@ When we have functions that don't return anything, we've essentially thrown a mo
 #### Conclusion
 We should prefer an abstraction that allows us to return aynchronous values. This way our asynchronous functions perform their computations and just return a value that represents the pending operation.
 
+___
 
 ### The Pending Value
 
@@ -186,6 +188,7 @@ promise.then (formattedFile) -> # do something with formattedFile
 
 And finally in this example we compose with the **Promise** value in order to create the new asynchronous function `readFormat`. `readFormat` takes in a path and calls `readFile` with that path. We go on to compose with the **Promise** returned from `readFile` with the function `formatFileAsync`.
 
+___
 
 ### The Message
 
