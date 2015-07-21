@@ -33,7 +33,8 @@ Because of this simplicity it's easy to compose them into more functions.
 shrinkFirst = (a) -> lowercase (first a)
 abbreviate  = (a, b) -> add (shrinkFirst a), (shrinkFirst b)
 ```
-This is possible because our functions are following a simple pattern, they all take in values and returning a value.  With this technique comes power, especially when we start creating our own values for the function composition.  
+This is possible because our functions are following a simple pattern, they all take in values and returning a value.  
+With this technique comes power, especially when we start creating our own values for the function composition.  
 For example, if we were to create our own value in the system, then we can create functions that use the value between each other.
 
 ```coffeescript
