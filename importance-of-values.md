@@ -56,7 +56,7 @@ ageBy1 = ageBy 1
 addTitleInd  = addTitle 'Ind.'
 ```
 
-We start off by defining the functions `ageBy` and `addTitle`, which are functions that return functions (Higher Order Functions). This is useful since we want to partially apply some generic functions, and then pass in a `person` value. In this case we've created a generic aging function, and generic title function. We go on to use these functions to create functions that will easily compose with the `person` value.
+We start off by defining the functions `ageBy` and `addTitle`, which are functions that return functions (Higher Order Functions). This is useful since we want to partially apply some generic functions, and then pass in a `person` value. In this case we've created a generic aging function, and generic title adding function. We go on to use these functions to build even more functions, and these functions will directly compose with the `person` value.
 
 ```coffeescript
 jake = person 22, 'jake'
@@ -72,14 +72,17 @@ ageBy1 (addTitleInd jake)
 addTitleInd (ageBy1 jake)
 ```
 
-The example above shows that we've built functions from functions with composition, and then went on to use those functions to compose with a `person` value. Which produced another `person` value whose name is "Mr. Jake", and is a year older than the `jake` value. Of course it doesn't stop here, we can still continue to compose together more functions. Though the point here is to show that: We're just building functions that take in values and return a value.
+The example above shows how we use function composition with the `person` value.  
+We produce another `person` value whose name is "Mr. Jake", and is a year older than the `jake` value.  
+And we do this easily by combining the functions that take in a `person` value and return a `person` value.  
+Of course the composition doesn't stop there, for brevity's sake we'll stop here, but we can still continue to compose together more functions if we wished to. But we get a good amount of mileage through just this, and it's all thanks to being able to return values from our functions.
 
-Though what happens when we can't return a value? Does such a scenario exist?  
-One particular situation comes to mind, which is Asynchronous Programming with the Callback Pattern.
+Though there exists a few problems in our system...
 
-### Asynchronous Programming with the Callback Pattern
 
-Up until now we've gone over examples of how we can be composing our functions with values.  
+### The Non-Value Returning Function
+
+Up until now we've gone over examples of how we can compose our functions with values.  
 Though all of those examples were simple, synchronous operations. What if we have a operation that should be asynchronous, like reading a file. If that's the case then we're faced with a constraint that limits the ways we can compose our functions.
 
 ```coffeescript
@@ -87,9 +90,8 @@ readFile './file', (err, data) ->
   # logic
 ```
 
-Here we've introduced a rather simple example of some asynchronous callback code. The `readFile` function will take in a path to a file as a string, and take in a function that acts as the correspondent of the results.  
-
-The reason we pass the function in is because `readFile` doesn't return a value, since it's asynchronous and won't have the results to return. Instead we pass in a function that will be called with the results of the read file when finished.
+Here we've introduced a rather simple, run-of-the-mill example of some asynchronous code.  
+The `readFile` function will take in a path to a file as a string, and take in a function that acts as the correspondent of the results. Once the asynchronous operation is finished, the function will be called with the read file data. We then use our own logic, in the body of the passed in function, to access that data. We do this because the `readFile` function cannot return the results at the end of the function, becase the operation is asynchronous.
 
 ```coffeescript
 append  = (s) -> (f) -> "#{f}#{s}"
@@ -99,7 +101,8 @@ appendFooter = append 'Footer'
 prependHeader = prepend 'Header'
 ```
 
-Here we've created the functions `append` and `prepend`, that both take in a string and then file data. We'll also create the `prependHeader` and `appendFooter` functions for convenience. Okay time to compose our functions. How do we do that? Well since the `readFile` function uses the Callback Pattern we can't compose the same way as before. Or else this happens.
+Before we use the `readFile` function, we'll create some functions that will be meant to compose with file data from `readFile`. We start by creating the functions `append` and `prepend`, which both take in a string and then file data. We'll also create the `prependHeader` and `appendFooter` functions for convenience.  
+Now if try to compose these new functions with `readFile`, like we did with our other functions, we'll get errors.
 
 ```coffeescript
 file = readFile './file', (err, data) ->
@@ -111,25 +114,32 @@ formattedFile = prependHeader (appendFooter file)
 ```
 
 As we've mentioned already, `readFile` doesn't return anything.  
-We solely need to rely on the callback function to receive the results of the asynchronous operation. With that constraint we're forced to do all of our composition inside the body of the callback function.
+We solely need to rely on the passed in function to receive the results of the asynchronous operation.  
+With that architecture forced on us, we're forced to do all of our composition inside the body of the callback function.
 
-```
+```coffeescript
 readFile './file', (err, data) ->
   formattedFile = prependHeader (appendFooter data)
-``` then return the correct value
+``` 
 
-There's a few issues that we should have with this code:
+Now this may not like a bad thing at first, but here's a few things we should consider about this code.
 
-1. `readFile` doesn't return anything. So far we've derived a lot of power from composing together functions. When we have a function that doesn't return anything we essentially through a monkey wrench into environment. Now we have to tip-toe around the fact that we have special functions in the system.
+##### What does our function take?
+We're conflating two things in the function arguments, which are the arguments needed for the computation, as well as the mechanism used for "unwrapping" the asynchronous operation. We're essentially exposing how we're handling the delivery of the asynchronous results through the function arguments instead of through the return value.
 
-2. We're conflating the way we're handling the asynchronous operation with the input of the function. Normally the arguments we would be used in context for the operation, in this case the callback is being used to deliver the results.
+**Note**  
+We use term "unwrapping" to depict that the asynchronous operation is a package that contains the results of operation, and we "unwrap" it by waiting until the operation is finished and having the passed in function called with those results
 
-We should prefer an abstraction that allows us to return aynchronous values. This way our functions will worry about their computations, while returning a value that represents the operation. 
+##### What does our function give back?
+So far we've derived a lot of power from composing together functions that return values.  
+When we have functions that don't return anything, we've essentially thrown a monkey wrench into our function composition. And then we're in a situation where we have two kinds of functions and have to tip-toe around the asynchronous functions, which we should avoid.
 
-### Asynchronous Programming with Promises
+##### Conclusion
+We should prefer an abstraction that allows us to return aynchronous values. This way our asynchronous functions perform their computations and just return a value that represents the pending operation. 
 
-When considering the use of an asynchronous abstraction, like we've, described above, there's a popular concept that comes to mind. **Promises**.
-Promises will do exactly as we've described. They'll represent the pending value from an asynchronous operation.
+### Meet our Pending Value
+
+Luckily in our case we already know how an existing abstraction that is used as the pending value, it's commonly referred to as a Promise. We can now use the Promise value as a way to compose together our asynchronous operations with our synchronous ones.
 
 ```coffeescript
 pending = readFile './file'
@@ -138,7 +148,7 @@ pending
   .catch (err) -> # do something with err
 ```
 
-Now we've defined `readFile` to be a function that returns a `Promise`, or a pending value. So the only arguments it takes in is the file path. Once given the file path, `readfile` returns a pending value, and when finished it will contain the file data results. We then go one to use methods on the Promise value to access the results of the operation.
+Now we've redefined `readFile` to be a function that returns a `Promise`, or a pending value. So the only arguments it takes in is the file path. Once given the file path, `readfile` returns a pending value, and when finished it will contain the file data results. We then go one to use methods on the Promise value to access the results of the operation.
 
 Now the most important part here is that we're using the Promise value in our system as the contract, between the asynchronous work and the consumer of the asynchronous work. And because Promises have a defined API and mechanics, we can assume and abstract over the way they work.
 At this point we can go back to defining functions that take in values and return a value, this time with Promises.
