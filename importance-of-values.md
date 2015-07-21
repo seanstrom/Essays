@@ -80,7 +80,7 @@ Of course the composition doesn't stop there, for brevity's sake we'll stop here
 Though there exists a few problems in our system...
 
 
-### The Non-Value Returning Function
+### The Villain: The Non-Value Returning Function
 
 Up until now we've gone over examples of how we can compose our functions with values.  
 Though all of those examples were simple, synchronous operations. What if we have a operation that should be asynchronous, like reading a file. If that's the case then we're faced with a constraint that limits the ways we can compose our functions.
@@ -135,9 +135,10 @@ So far we've derived a lot of power from composing together functions that retur
 When we have functions that don't return anything, we've essentially thrown a monkey wrench into our function composition. And then we're in a situation where we have two kinds of functions and have to tip-toe around the asynchronous functions, which we should avoid.
 
 ##### Conclusion
-We should prefer an abstraction that allows us to return aynchronous values. This way our asynchronous functions perform their computations and just return a value that represents the pending operation. 
+We should prefer an abstraction that allows us to return aynchronous values. This way our asynchronous functions perform their computations and just return a value that represents the pending operation.
 
-### Meet our Pending Value
+
+### Our Hero: The Pending Value
 
 In our case we already know of an existing abstraction that is used as the pending value, it's commonly referred to as a **Promise**. Which means we can begin to use the Promise value as a way to compose together our asynchronous operations with our synchronous ones.
 
@@ -186,10 +187,11 @@ promise.then (formattedFile) -> # do something with formattedFile
 
 And finally in this example we compose with the **Promise** value in order to create the new asynchronous function `readFormat`. `readFormat` takes in a path and calls `readFile` with that path. We go on to compose with the **Promise** returned from `readFile` with the function `formatFileAsync`.
 
+
 ### Values are Important
 
 Now the point here isn't necessarily "Use Promises", but more so "Use Values".  
 Promises are just one mechanism for accomplishing the same function composition we want to see from asynchronous functions. We could easily use **Streams**, or some other value, to represent the Pending Value in our system. And that should be the primary take away here, when you're able to represent pieces of your system as values, you're able to compose with those values. In the case of asynchronous operations, we're able to represent them as Promises.
 With Promises we're able to achieve the same kind of composition between our functions.
 
-### Redo Outro
+#### Redo Outro
