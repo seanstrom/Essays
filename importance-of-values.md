@@ -9,15 +9,16 @@ template: essay.jade
 
 #### Redo this intro
 
-### Using Values
+### Composition
 
-In an ideal system my workflow would consist of composing together functions with values, and these values would serve as the contracts between all of my code. For example, code that would normally perform operations like: 
+In an ideal system, our workflow would consist of composing together functions.  
+For example, code that would normally perform operations like: 
 
 * adding numbers
 * manipulating strings
 * iterating over data
 
-can now be be modeled as functions that take in values and return a value.
+can now be be modeled as functions.
 
 ```coffeescript
 add       = (a, b) -> a + b
@@ -25,14 +26,15 @@ first     = (a) -> a[0]
 lowercase = (a) -> a.toLowerCase()
 ```
 
-The `add`, `first`, and `lowercase` functions are very simple, they all take in the values they need and return a value. Since these functions are that simple, it's easy to compose them to build more functions.
+The `add`, `first`, and `lowercase` functions are simple, they take in their arguments and return a value.  
+Because of this simplicity it's easy to compose them into more functions.
 
 ```coffeescript
 shrinkFirst = (a) -> lowercase (first a)
 abbreviate  = (a, b) -> add (shrinkFirst a), (shrinkFirst b)
 ```
-
-Here we've taken our simple functions and composed them into more functions. Composing functions is a simple technique, but the simplicity carries a great amount of power when you start using more meaningful values. For example if we were to create our own value in the system, then we can create functions that use the value as the contract between each other.
+This is possible because our functions are following a simple pattern, they all take in values and returning a value. With this technique comes power, especially when we start creating our own values for the function composition.  
+For example, if we were to create our own value in the system, then we can create functions that use the value between each other.
 
 ```coffeescript
 person = (age, name) ->
@@ -42,40 +44,34 @@ person = (age, name) ->
 jake = person 22, 'jake'
 ```
 
-Now we have defined our own type of value, `person`, and we can created an example `person` named `jake`.  
-We can now begin to create functions that rely on a `person` value being passed in, and then returning a `person` value as well.
+Now we have defined our own value, `person`, and we can create an example `person` named `jake`.  
+Since the person value now exists in our system, we'll begin to create functions that rely on a `person` value being passed in, and then returning a `person` value as well.
 
 ```coffeescript
 ageBy    = (y) -> (p) -> person (add y, p.age), p.name
 addTitle = (t) -> (p) -> person p.age, "#{t} #{p.name}"
-```
 
-Here we've created the functions `ageBy` and `addTitle` which are functions that return functions.
-This is useful since we want to create a generic functions for a `person` value, but don't want to hardcode minor details like number of years or titles. Instead the functions will take in those minor details as arguments, and then return a function that will take in a person value. This concept can be explained in more depth, but the gist here is to use the more abstract functions to build functions that will easily compose with the `person` value.
-
-```coffeescript
-addMr  = addTitle 'Mr.'
 ageBy1 = ageBy 1
+addTitleInd  = addTitle 'Ind.'
 ```
 
-Here we have the functions `addMr` and `ageBy1`, which are simple functions that will compose the `person` value in the system.
+We start off by defining the functions `ageBy` and `addTitle`, which are functions that return functions (Higher Order Functions). This is useful since we want to partially apply some generic functions, and then pass in a `person` value. In this case we've created a generic aging function, and generic title function. We go on to use these functions to create functions that will easily compose with the `person` value.
 
 ```coffeescript
 jake = person 22, 'jake'
 
 # with variables
-mrJake = addMr jake
-olderMrJake = ageBy1 mrJake
+indJake = addTitleInd jake
+olderIndJake = ageBy1 indJake
 
 # or inlined
-ageBy1 (addMr jake)
+ageBy1 (addTitleInd jake)
 
 # or inlined this way
-addMr (ageBy1 jake)
+addTitleInd (ageBy1 jake)
 ```
 
-As you can we've built functions from functions and then went on to use those functions to compose into `person` value. In this case we've taken `jake` and made the name "Mr. Jake", and increased the age by one year.  
-All we've done here so far is make small functions with a single responsibility, and compose them into larger functions that perform specific tasks. This is made possible because we've focused on creating functions that take in values and return a value.
+The example above shows that we've built functions from functions with composition, and then went on to use those functions to compose with a `person` value. Which produced another `person` value whose name is "Mr. Jake", and is a year older than the `jake` value. Of course it doesn't stop here, we can still continue to compose together more functions. Though the point here is to show that: We're just building functions that take in values and return a value.
 
 Though what happens when we can't return a value? Does such a scenario exist?  
 One particular situation comes to mind, which is Asynchronous Programming with the Callback Pattern.
