@@ -195,5 +195,3 @@ The message here isn't necessarily "Use Promises", but more so "Use Values".
 When you're able to represent pieces of your system as values, you're able to compose with those values.  
 In the case of asynchronous operations, we're able to represent them as **Promises**.  
 With **Promises** we're able to achieve the same kind of composition between our functions.
-
-#### Redo Outro
