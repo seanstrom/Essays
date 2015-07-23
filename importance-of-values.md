@@ -7,7 +7,15 @@ template: essay.jade
 
 ![](http://4.bp.blogspot.com/_vt749aV4Y7Q/TQ0RGGCoOkI/AAAAAAAAFsA/fKNZwumM1fI/s1600/palace%2Bof%2Bzinn.jpg)
 
-### The System
+### Caution
+
+Most of what's to be covered is an opinionated stance on how I wish to write programs.  
+Many of the concepts covered can be applied to many languages/stacks/paradigms, but we specifically target Javascript in the discussion. I should also mention that for the sake of simplicity, certain topics don't go too far in depth.  
+The fact is that some concepts here may need their own entire essay to properly explain.  
+I try to give enough of an introduction to them, while keeping it relevant.  
+With all that said, let's begin.
+
+### Our System
 
 In an ideal system, our workflow would consist of composing together functions.  
 For example, code that would normally perform operations like: 
@@ -187,7 +195,7 @@ promise.then (formattedFile) -> # do something with formattedFile
 And finally in this example we compose with the **Promise** value in order to create the new asynchronous function `readFormat`. `readFormat` takes in a path and calls `readFile` with that path. We go on to compose with the **Promise** returned from `readFile` with the function `formatFileAsync`.
 
 
-### The Message
+### Summary
 
 The message here isn't necessarily "Use Promises", but more so "Use Values".  
 When you're able to represent pieces of your system as values, you're able to compose with those values.  
