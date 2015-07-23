@@ -144,7 +144,7 @@ This way our asynchronous functions perform their computations and then return a
 
 ### The Pending Value
 
-In our case we already know of an existing abstraction that is used as the pending value, it's commonly referred to as a **Promise**. Which means we can begin to use the Promise value as a way to compose together our asynchronous operations with our synchronous ones.
+In our case we already know of an existing abstraction that is used as the pending value, it's commonly referred to as a **Promise**. Which means we can begin to use the **Promise** as a way to compose together our asynchronous operations with our synchronous ones.
 
 ```coffeescript
 pending = readFile './file'
@@ -153,7 +153,7 @@ pending
   .catch (err) -> # do something with err
 ```
 
-First we'll redefine `readFile` to be a function that returns a pending value, or a **Promise**. Which makes the only arguments it takes in the file path. Once given the file path, `readfile` will return a **Promise**. Then when the operation is finished it will contain the file data. We then go one to use methods on the Promise value to access the results of the operation.
+First we'll redefine `readFile` to be a function that returns a pending value, or a **Promise**. Which makes the only arguments it takes in the file path. Once given the file path, `readfile` will return a **Promise**, then when the operation is finished it will contain the file data. We go one to use the methods on the **Promise** to access the results of the operation.
 
 Now the important part here is that we're using **Promises** as the contract between the asynchronous work and the consumer of the asynchronous work. At this point we can go back to defining functions that take in values and return a value, this time with **Promises**.
 
@@ -172,7 +172,7 @@ promise
   .then prependHeader
 ```
 
-And another version of using the **Promise** value to chain together transformations on the file data.
+And a version of using the **Promise** value to chain together transformations on the file data.
 
 ```coffeescript
 formatFile = (file) -> prependHeader (appendFooter file)
