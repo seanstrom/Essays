@@ -11,8 +11,7 @@ template: essay.jade
 
 Most of what's to be covered is an opinionated stance on how I wish to write programs.  
 Many of the concepts covered can be applied to many languages/stacks/paradigms, but we specifically target Javascript in the discussion. I should also mention, that for the sake of simplicity, certain topics don't go too far in depth.  
-The fact is that some concepts here may need their own entire essay to properly explain.  
-I try to give enough of an introduction to them, while keeping it relevant.  
+The fact is some concepts mentioned may need their own entire essay to be explained properly. But I have tried to give enough of an introduction to them, while focusing on the main idea.  
 With all that said, let's begin.
 
 ### Our System
@@ -39,8 +38,8 @@ Because of this simplicity it's easy to compose them into more functions.
 shrinkFirst = (a) -> lowercase (first a)
 abbreviate  = (a, b) -> add (shrinkFirst a), (shrinkFirst b)
 ```
-This is possible because our functions are following a simple pattern.  
-They all take in values and return a value. With that technique comes power, especially when we start creating our own values for the function composition. For example, if we were to create our own value, then we can create functions that use the value between each other.
+
+This is possible because our functions are following a simple pattern. They all take in **values** and return a **value**. Though, with this simple technique comes power, especially when we begin creating our own values. Then we can make functions that use those new values between one another.
 
 ```coffeescript
 person = (age, name) ->
@@ -50,7 +49,7 @@ person = (age, name) ->
 jake = person 22, 'jake'
 ```
 
-Now we have defined our own value, `person`, and we created an example `person` named `jake`.  
+Here we have defined our own value, `person`, and we created an example `person` named `jake`.  
 Since the person value now exists in our system, we'll begin to create functions that rely on a `person` value being passed in, and then returning a `person` value as well.
 
 ```coffeescript
@@ -61,7 +60,7 @@ ageBy1 = ageBy 1
 addTitleInd  = addTitle 'Ind.'
 ```
 
-We start off by defining the functions `ageBy` and `addTitle`, which are functions that return functions. This is useful since we want to partially apply some generic functions, and then pass in a `person` value. In this case we've created a generic aging function, and generic title adding function. We go on to use these functions to build even more functions, and these functions will directly compose with the `person` value.
+We start off by defining the functions `ageBy` and `addTitle`, which are functions that return functions. This is useful since we want to partially apply some generic functions, and then later pass in a `person` value. In this case we've created a generic aging function, and generic title adding function. We go on to use these functions to build even more functions, and the functions we make will directly compose with the `person` value.
 
 ```coffeescript
 jake = person 22, 'jake'
@@ -77,20 +76,17 @@ ageBy1 (addTitleInd jake)
 addTitleInd (ageBy1 jake)
 ```
 
-The example above shows how we use function composition with the `person` value.  
-We produce another `person` value whose name is "Mr. Jake", and is a year older than the `jake` value.  
-And we do this easily by combining the functions that take in a `person` value and return a `person` value.  
+The example above shows how we've used our new functions to compose with the `person` value.  
+We produce another `person` value whose name now has the title "Ind.", and is also a year older than the original `jake` value. We do this easily by combining the functions `ageBy1` and `addTitleInd`, both of which take in a `person` value and return a `person` value.
 
-Of course the composition doesn't stop there. For brevity's sake we'll stop here, but we can still continue to compose together more functions if we wished to. But we get a good amount of mileage through just this, and it's all thanks to being able to return values from our functions.  
-
-Though, we still have some problems in our system.  
-We're about to come in contact with a function that doesn't return a value.
+More to the point, our function composition allows us to chain many transformations into our desired result.  
+Though there is still a potential flaw in our system. What would happen if some our functions would not be able to return a value?
 
 
 ### The Non-Value Returning Function
 
 Up until now we've gone over examples of how we can compose our functions with values.  
-Though all of those examples were simple, synchronous operations. What if we have a operation that should be asynchronous, like reading a file. If that's the case then we're faced with a constraint that limits the ways we can compose our functions.
+Though all of those examples were simple, *synchronous* operations. What if we have a operation that should be asynchronous, like reading a file. If that's the case then we're faced with a constraint that limits the ways we can compose our functions.
 
 ```coffeescript
 readFile './file', (err, data) ->
@@ -108,8 +104,8 @@ appendFooter = append 'Footer'
 prependHeader = prepend 'Header'
 ```
 
-Before we use the `readFile` function, we'll create some functions that will be meant to compose with file data from `readFile`. We start by creating the functions `append` and `prepend`, which both take in a string and then file data. We'll also create the `prependHeader` and `appendFooter` functions for convenience.  
-Now if try to compose these new functions with `readFile`, like we did with our other functions, we'll get errors.
+Above we create some functions that will be meant to compose with file data from `readFile`.  
+We start by creating the functions `append` and `prepend`, which both take in a string and then file data. We'll also create the `prependHeader` and `appendFooter` functions for convenience. Now what happens when we try to compose these new functions directly with `readFile`.
 
 ```coffeescript
 file = readFile './file', (err, data) ->
@@ -120,9 +116,9 @@ formattedFile = prependHeader (appendFooter file)
 # formattedFile == ???
 ```
 
-As we've mentioned already, `readFile` doesn't return anything.  
+Well as we've mentioned already, `readFile` doesn't return anything, so we can't compose with it directly.
 We solely need to rely on the passed in function to receive the results of the asynchronous operation.  
-With that architecture forced on us, we're forced to do all of our composition inside the body of the callback function.
+With that architecture forced upon us, we are required to do all of our composition inside the body of the callback function.
 
 ```coffeescript
 readFile './file', (err, data) ->
@@ -135,14 +131,15 @@ Now this may not seem problematic at first, but we should consider a few things 
 At the moment we're conflating two things in the function arguments: the arguments needed for the computation, as well as the mechanism used for "unwrapping" the asynchronous operation. We're essentially exposing how we're handling the delivery of the asynchronous results through the function arguments instead of through the return value.
 
 **Note**  
-We use the term "unwrapping" to depict that the asynchronous operation is a package that contains the results of operation, and we "unwrap" it by waiting until the operation is finished and having the passed in function called with those results
+We use the term "unwrapping" to depict that the asynchronous operation is a package that contains the results of the operation. We "unwrap" it by waiting until the operation is finished and having the passed in function called with those results
 
 #### What does our function give?
 So far we've derived a lot of power from composing together functions that return values.  
 When we have functions that don't return anything, we've essentially thrown a monkey wrench into our function composition.
 
 #### Conclusion
-We should prefer an abstraction that allows us to return aynchronous values. This way our asynchronous functions perform their computations and just return a value that we can compose our functions with.
+We should prefer an abstraction that allows us to return asynchronous values.  
+This way our asynchronous functions perform their computations and then return a value that we can compose our functions with.
 
 
 ### The Pending Value
