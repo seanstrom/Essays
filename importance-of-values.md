@@ -82,9 +82,10 @@ The example above shows how we use function composition with the `person` value.
 We produce another `person` value whose name is "Mr. Jake", and is a year older than the `jake` value.  
 And we do this easily by combining the functions that take in a `person` value and return a `person` value.  
 
-Of course the composition doesn't stop there, for brevity's sake we'll stop here, but we can still continue to compose together more functions if we wished to. But we get a good amount of mileage through just this, and it's all thanks to being able to return values from our functions.
+Of course the composition doesn't stop there, for brevity's sake we'll stop here, we can still continue to compose together more functions if we wished to. But we get a good amount of mileage through just this, and it's all thanks to being able to return values from our functions.  
 
-Though there exists a few problems in our system...
+Though, we still have some problems in our system.  
+We're about to come in contact with a function that doesn't return a value.
 
 
 ### The Non-Value Returning Function
