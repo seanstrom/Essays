@@ -41,7 +41,7 @@ abbreviate  = (a, b) -> add (shrinkFirst a), (shrinkFirst b)
 ```
 This is possible because our functions are following a simple pattern, they all take in values and returning a value.  
 With this technique comes power, especially when we start creating our own values for the function composition.  
-For example, if we were to create our own value in the system, then we can create functions that use the value between each other.
+For example, if we were to create our own value, then we can create functions that use the value between each other.
 
 ```coffeescript
 person = (age, name) ->
@@ -51,7 +51,7 @@ person = (age, name) ->
 jake = person 22, 'jake'
 ```
 
-Now we have defined our own value, `person`, and we can create an example `person` named `jake`.  
+Now we have defined our own value, `person`, and we created an example `person` named `jake`.  
 Since the person value now exists in our system, we'll begin to create functions that rely on a `person` value being passed in, and then returning a `person` value as well.
 
 ```coffeescript
