@@ -7,7 +7,7 @@ template: essay.jade
 
 ![](http://4.bp.blogspot.com/_vt749aV4Y7Q/TQ0RGGCoOkI/AAAAAAAAFsA/fKNZwumM1fI/s1600/palace%2Bof%2Bzinn.jpg)
 
-### Caution
+### Word of Caution
 
 Most of what's to be covered is an opinionated stance on how I wish to write programs.  
 Many of the concepts covered can be applied to many languages/stacks/paradigms, but we specifically target Javascript in the discussion. I should also mention that for the sake of simplicity, certain topics don't go too far in depth.  
@@ -39,9 +39,8 @@ Because of this simplicity it's easy to compose them into more functions.
 shrinkFirst = (a) -> lowercase (first a)
 abbreviate  = (a, b) -> add (shrinkFirst a), (shrinkFirst b)
 ```
-This is possible because our functions are following a simple pattern, they all take in values and returning a value.  
-With this technique comes power, especially when we start creating our own values for the function composition.  
-For example, if we were to create our own value, then we can create functions that use the value between each other.
+This is possible because our functions are following a simple pattern.  
+They all take in values and return a value. With that technique comes power, especially when we start creating our own values for the function composition. For example, if we were to create our own value, then we can create functions that use the value between each other.
 
 ```coffeescript
 person = (age, name) ->
@@ -82,7 +81,7 @@ The example above shows how we use function composition with the `person` value.
 We produce another `person` value whose name is "Mr. Jake", and is a year older than the `jake` value.  
 And we do this easily by combining the functions that take in a `person` value and return a `person` value.  
 
-Of course the composition doesn't stop there, for brevity's sake we'll stop here, we can still continue to compose together more functions if we wished to. But we get a good amount of mileage through just this, and it's all thanks to being able to return values from our functions.  
+Of course the composition doesn't stop there. For brevity's sake we'll stop here, but we can still continue to compose together more functions if we wished to. But we get a good amount of mileage through just this, and it's all thanks to being able to return values from our functions.  
 
 Though, we still have some problems in our system.  
 We're about to come in contact with a function that doesn't return a value.
@@ -130,20 +129,20 @@ readFile './file', (err, data) ->
   formattedFile = prependHeader (appendFooter data)
 ``` 
 
-Now this may not like a bad thing at first, but here's a few things we should consider about this code.
+Now this may not seem problematic at first, but we should consider a few things about this code.
 
 #### What does our function take?
-We're conflating two things in the function arguments, which are the arguments needed for the computation, as well as the mechanism used for "unwrapping" the asynchronous operation. We're essentially exposing how we're handling the delivery of the asynchronous results through the function arguments instead of through the return value.
+At the moment we're conflating two things in the function arguments: the arguments needed for the computation, as well as the mechanism used for "unwrapping" the asynchronous operation. We're essentially exposing how we're handling the delivery of the asynchronous results through the function arguments instead of through the return value.
 
 **Note**  
 We use the term "unwrapping" to depict that the asynchronous operation is a package that contains the results of operation, and we "unwrap" it by waiting until the operation is finished and having the passed in function called with those results
 
 #### What does our function give?
 So far we've derived a lot of power from composing together functions that return values.  
-When we have functions that don't return anything, we've essentially thrown a monkey wrench into our function composition. And then we're in a situation where we have two kinds of functions and have to tip-toe around the asynchronous functions, which we should avoid.
+When we have functions that don't return anything, we've essentially thrown a monkey wrench into our function composition.
 
 #### Conclusion
-We should prefer an abstraction that allows us to return aynchronous values. This way our asynchronous functions perform their computations and just return a value that represents the pending operation.
+We should prefer an abstraction that allows us to return aynchronous values. This way our asynchronous functions perform their computations and just return a value that we can compose our functions with.
 
 
 ### The Pending Value
@@ -198,7 +197,6 @@ And finally in this example we compose with the **Promise** value in order to cr
 
 ### Summary
 
-The message here isn't necessarily "Use Promises", but more so "Use Values".  
+The message here isn't necessarily "use Promises", but more so "use Values".  
 When you're able to represent pieces of your system as values, you're able to compose with those values.  
-In the case of asynchronous operations, we're able to represent them as **Promises**.  
-With **Promises** we're able to achieve the same kind of composition between our functions.
+In the case of asynchronous operations, we're able to represent them as **Promises**, and with **Promises** we're able to achieve the function composition we want.
