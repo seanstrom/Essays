@@ -14,7 +14,7 @@ Many of the concepts covered can be applied to many languages, but I specificall
 
 I should also mention, that for the sake of simplicity, certain topics aren't explained in depth.  
 The fact is some concepts mentioned may need their own entire essay to be explained properly.  
-But I have tried to give enough of an introduction to them, while focusing on the main idea.  
+But I have tried to give enough of an introduction to them, while remaining focused on the core idea.  
 With all that said, let's begin.
 
 ### Our System
