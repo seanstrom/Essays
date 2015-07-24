@@ -10,9 +10,7 @@ template: essay.jade
 ### Word of Caution
 
 Most of what's to be covered is an opinionated stance on how I wish to write programs.  
-Many of the concepts covered can be applied to many languages, but I specifically target Javascript in the discussion.  
-
-I should also mention, that for the sake of simplicity, certain topics aren't explained in depth.  
+The concepts that will be covered can be applied to many languages, but specifically targetJavascript in the discussion. I also mention, that for the sake of simplicity, certain topics aren't explained in depth.  
 The fact is some concepts mentioned may need their own entire essay to be explained properly.  
 But I have tried to give enough of an introduction to them, while remaining focused on the core idea.  
 With all that said, let's begin.
@@ -29,21 +27,20 @@ For example, code that would normally perform operations like:
 would now be be modeled as functions.
 
 ```coffeescript
-add       = (a, b) -> a + b
-first     = (a) -> a[0]
-lowercase = (a) -> a.toLowerCase()
-```
-
-The `add`, `first`, and `lowercase` functions are simple, they take in their arguments and return a value.  
-Because of this simplicity it's easy to compose them into more functions.
-
-```coffeescript
-shrinkFirst = (a) -> lowercase (first a)
+add         = (a, b) -> a + b
+first       =    (a) -> a[0]
+lowercase   =    (a) -> a.toLowerCase()
+shrinkFirst =    (a) -> lowercase (first a)
 abbreviate  = (a, b) -> add (shrinkFirst a), (shrinkFirst b)
 ```
 
-This is possible because our functions are following a simple pattern.  
-They all take in **values** and return a **value**. With this simple technique comes power, especially when we begin creating our own values. Then we can make functions that use those new values between one another.
+The `add`, `first`, and `lowercase` functions are simple, they take in their arguments and return a value.  
+This simplicity makes it easy for us to compose into more functions, this is possible because our functions are following a simple pattern.  
+
+They all take in **values** and return a **value**.
+
+With this simple technique comes power, especially when we begin creating our own values.  
+Now we can make functions that use those new values between one another.
 
 ```coffeescript
 person = (age, name) ->
@@ -51,28 +48,26 @@ person = (age, name) ->
   name: name
   
 jake = person 22, 'jake'
-```
 
-Here we have defined our own value, `person`, and we created an example `person` named `jake`.  
-Since the person value now exists in our system, we'll begin to create functions that rely on a `person` value being passed in, and then returning a `person` value as well.
-
-```coffeescript
 ageBy    = (y) -> (p) -> person (add y, p.age), p.name
 addTitle = (t) -> (p) -> person p.age, "#{t} #{p.name}"
 
 ageBy1       = ageBy 1
 addTitleInd  = addTitle 'Ind.'
-```
 
-We start off by defining the functions `ageBy` and `addTitle`, which are functions that return functions. This is useful since we want to partially apply some generic functions, and then later pass in a `person` value. In this case we've created a generic aging function, and generic title adding function. We go on to use these functions to build even more functions, and the functions we make will directly compose with the `person` value.
-
-```coffeescript
 jake         = person 22, 'jake'
 indJake      = addTitleInd jake
 olderIndJake = ageBy1 indJake
 ```
 
-The example above shows how we've used our new functions to compose with the `person` value.  
+Here we've defined our own value, `person`, and we created an example `person` named `jake`.  
+Since the person value now exists in our system, we can begin to create functions that rely on a `person` value being passed in, and then returning a `person` value as well.
+
+We continue by defining the functions `ageBy` and `addTitle`, which are functions that return functions.  
+This is useful since we want to partially apply some generic functions, and then later pass in a `person` value.  
+In this case we've created a generic aging function, and generic title adding function. We go on to use these functions to build even more functions, and the functions we make will directly compose with the `person` value.
+
+Now we show how how to use our new functions to compose with the `person` value.  
 We produce another `person` value whose name now has the title "Ind.", and is also a year older than the original `person` value. We do this easily by combining the functions `ageBy1` and `addTitleInd`, both of which take in a `person` value and return a `person` value.
 
 More to the point, our function composition allows us to chain many transformations into our desired result.  
@@ -124,17 +119,20 @@ readFile './file', (err, data) ->
 Now this may not seem problematic at first, but we should consider a few things about this code.
 
 #### 1. What does our function take?
+
 At the moment we're conflating two things in the function arguments: the arguments needed for the computation, as well as the mechanism used for "unwrapping" the asynchronous operation. We're essentially exposing how we're handling the delivery of the asynchronous results through the function arguments instead of through the return value.
 
 **Note**  
 We use the term "unwrapping" to depict that the asynchronous operation is a package that contains the results of the operation. We "unwrap" it by waiting until the operation is finished and having the passed in function called with those results
 
 #### 2. What does our function give?
+
 Nothing.  
 So far we've derived a lot of power from composing together functions that return values.  
 When we have functions that don't return anything, we've essentially thrown a monkey wrench into our function composition.
 
 #### Conclusion
+
 We should prefer an abstraction that allows us to return asynchronous values.  
 This way our asynchronous functions perform their computations and then return a value that we can compose our functions with.
 
@@ -144,50 +142,52 @@ This way our asynchronous functions perform their computations and then return a
 In our case we already know of an existing abstraction that is used as the pending value, it's commonly referred to as a **Promise**. Which means we can begin to use **Promises** as a way to compose together our asynchronous operations with our synchronous ones.
 
 ```coffeescript
-pending = readFile './file'
-pending
-  .then (data) -> # do something with data
-  .catch (err) -> # do something with err
-```
+# Step: 1
 
-In the example above, we redefine `readFile` to be a function that returns a pending value, or a **Promise**.  
-Which would make the file path the only argument the function needs now. Once given the file path, `readfile` will return a **Promise**, and when the operation is finished it will contain the file data.  
-We then go one to use the methods of the **Promise** to access the results of the operation.   
-Now that we've designed `readFile` to be a function that returns a **Promise**, we can now start defining functions that will compose with the **Promises**.
+promise = readFile './file'
+promise
+  .then (fileData) -> # logic with file
+  .catch (err) -> # error handling
 
-```coffeescript
+# or
+
 promise = readFile './file'
 promise
   .then (file) -> prependHeader (appendFooter file)
-  .then (formattedFile) -> # do something with formattedFile
-```
+  .then (formattedFile) -> # logic with formattedFile
+  .catch (err) -> # error handling
 
-Above we have an example of using the `then` method to pass the results to our original `appendFooter` and `prependHeader` functions.
+# or
 
-```coffeescript
 promise
   .then appendFooter
   .then prependHeader
-  .then (formattedFile) -> # use formattedFile
+  .then (formattedFile) -> # logic with formattedFile
+  .catch (err) -> # error handling
 ```
 
+In the first step we redefine `readFile` to be a function that returns a pending value, or a **Promise**.  
+That now makes the file path the only argument the function needs now. Once given the file path, `readfile` will return a **Promise**, and when the operation is finished it will contain the file data.  
+
+We then go one to use the methods of the **Promise** to access the results of the operation.   
+Now that we've designed `readFile` to be a function that returns a **Promise**, we can now start defining functions that will compose with the **Promises**.
+
+Above we have an example of using the `then` method to pass the results to our original `appendFooter` and `prependHeader` functions.
 This last example uses the **Promise** `then` method to chain together transformations on the file data.
 
 ```coffeescript
 formatFile = (file) -> prependHeader (appendFooter file)
 formatFileAsync = (promise) -> promise.then formatFile
-```
 
-Above we define two functions. One for unwrapping the **Promise** value with the `then` method.  
-And another function that takes in the file data and performs the transformations. We'll go one to use these functions in to compose with a **Promise** from `readFile`.
-
-```coffeescript
 readFormat = (path) ->
   promise = readFile path
   formatFileAsync promise
 promise = readFormat './file'
 promise.then (formattedFile) -> # do something with formattedFile
 ```
+
+Above we define two functions. One for unwrapping the **Promise** value with the `then` method.  
+And another function that takes in the file data and performs the transformations. We'll go one to use these functions in to compose with a **Promise** from `readFile`.
 
 We now create a new function, `readFormat`, that abstracts over `readFile` and `formatFileAsync`.  
 `readFormat` will take in the path to file and call the `readFile` function with that argument.  
