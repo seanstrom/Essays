@@ -12,8 +12,9 @@ template: essay.jade
 Most of what's to be covered is an opinionated stance on how I wish to write programs.  
 Many of the concepts covered can be applied to many languages/stacks/paradigms, but we specifically target Javascript in the discussion.  
 
-I should also mention, that for the sake of simplicity, certain topics don't go far in depth.  
-The fact is some concepts mentioned may need their own entire essay to be explained properly. But I have tried to give enough of an introduction to them, while focusing on the main idea.  
+I should also mention, that for the sake of simplicity, certain topics aren't explained in depth.  
+The fact is some concepts mentioned may need their own entire essay to be explained properly.  
+But I have tried to give enough of an introduction to them, while focusing on the main idea.  
 With all that said, let's begin.
 
 ### Our System
