@@ -141,7 +141,7 @@ This way our asynchronous functions perform their computations and then return a
 
 ### The Pending Value
 
-In our case we already know of an existing abstraction that is used as the pending value, it's commonly referred to as a **Promise**. Which means we can begin to use the **Promise** as a way to compose together our asynchronous operations with our synchronous ones.
+In our case we already know of an existing abstraction that is used as the pending value, it's commonly referred to as a **Promise**. Which means we can begin to use **Promises** as a way to compose together our asynchronous operations with our synchronous ones.
 
 ```coffeescript
 pending = readFile './file'
@@ -150,9 +150,10 @@ pending
   .catch (err) -> # do something with err
 ```
 
-In the example above, we redefine `readFile` to be a function that returns a pending value, or a **Promise**. Which would make the file path the only argument the function needs. Once given the file path `readfile` will return a **Promise**, then when the operation is finished it will contain the file data. We can then go one to use the methods on the **Promise** to access the results of the operation. Now the important part here is that we're using **Promises** as the value between the asynchronous operation and the consumer of the asynchronous operation.
-
-At this point we can go back to defining functions that take in values and return a value, this time with **Promises**.
+In the example above, we redefine `readFile` to be a function that returns a pending value, or a **Promise**.  
+Which would make the file path the only argument the function needs now. Once given the file path, `readfile` will return a **Promise**, and when the operation is finished it will contain the file data.  
+We then go one to use the methods of the **Promise** to access the results of the operation.   
+Now that we've designed `readFile` to be a function that returns a **Promise**, we can now start defining functions that will compose with the **Promises**.
 
 ```coffeescript
 promise = readFile './file'
@@ -167,16 +168,18 @@ Above we have an example of using the `then` method to pass the results to our o
 promise
   .then appendFooter
   .then prependHeader
+  .then (formattedFile) -> # use formattedFile
 ```
 
-This last example uses the **Promise** value's `then` method to chain together transformations on the file data.
+This last example uses the **Promise** `then` method to chain together transformations on the file data.
 
 ```coffeescript
 formatFile = (file) -> prependHeader (appendFooter file)
 formatFileAsync = (promise) -> promise.then formatFile
 ```
 
-Here's another example where we define two functions. One for unwrapping the **Promise** value with the `then` method, and another function that takes in the file data and performs the transformations.
+Above we define two functions. One for unwrapping the **Promise** value with the `then` method.  
+And another function that takes in the file data and performs the transformations. We'll go one to use these functions in to compose with a **Promise** from `readFile`.
 
 ```coffeescript
 readFormat = (path) ->
@@ -186,7 +189,11 @@ promise = readFormat './file'
 promise.then (formattedFile) -> # do something with formattedFile
 ```
 
-Finally in the last example, we compose with the **Promise** value in order to create the new asynchronous function `readFormat`. `readFormat` takes in a path and calls `readFile` with that path. We go on to compose with the **Promise** returned from `readFile` with the function `formatFileAsync`.
+We now create a new function, `readFormat`, that abstracts over `readFile` and `formatFileAsync`.  
+`readFormat` will take in the path to file and call the `readFile` function with that argument.  
+We then use the `formatFileAsync` function to compose with the promise from `readFile`, and then we finally return the **Promise** of the formatted read file.
+
+As shown above, we've successfully taken are formally *Non-Value Returning Function*, and was able to compose a transformation with the function's return value. This is thanks to the fact that we've designed our asynchronous function to return a value (**Promise**), instead of nothing.
 
 
 ### Summary
