@@ -10,7 +10,7 @@ template: essay.jade
 ### Word of Caution
 
 Most of what's to be covered is an opinionated stance on how I wish to write programs.  
-Many of the concepts covered can be applied to many languages/stacks/paradigms, but we specifically target Javascript in the discussion.  
+Many of the concepts covered can be applied to many languages, but I specifically target Javascript in the discussion.  
 
 I should also mention, that for the sake of simplicity, certain topics aren't explained in depth.  
 The fact is some concepts mentioned may need their own entire essay to be explained properly.  
