@@ -9,8 +9,8 @@ template: essay.jade
 
 ### Word of Caution
 
-Most of what's to be covered is an opinionated stance on how I wish to write programs.  
-The concepts that will be covered can be applied to many languages, but specifically targetJavascript in the discussion. I also mention, that for the sake of simplicity, certain topics aren't explained in depth.  
+Most of what's to be covered is an opinionated stance on how I write programs.  
+The concepts that will be covered can be applied to many languages, but they specifically target Javascript in the discussion. Also, for the sake of simplicity, certain topics are not explained in depth.  
 The fact is some concepts mentioned may need their own entire essay to be explained properly.  
 But I have tried to give enough of an introduction to them, while remaining focused on the core idea.  
 With all that said, let's begin.
@@ -34,20 +34,20 @@ shrinkFirst =    (a) -> lowercase (first a)
 abbreviate  = (a, b) -> add (shrinkFirst a), (shrinkFirst b)
 ```
 
-The `add`, `first`, and `lowercase` functions are simple, they take in their arguments and return a value.  
-This simplicity makes it easy for us to compose into more functions, this is possible because our functions are following a simple pattern.  
-
-They all take in **values** and return a **value**.
-
-With this simple technique comes power, especially when we begin creating our own values.  
-Now we can make functions that use those new values between one another.
+The functions defined all follow a simple pattern, they all take in **values** and return a **value**.  
+With the use of that pattern we're able to use our more generic functions to build up to more meaningful abstractions.
+This is especially true when we begin creating our own values to be used between functions.
 
 ```coffeescript
+# Step 1: Creating our own value
+
 person = (age, name) ->
   age: age
   name: name
   
 jake = person 22, 'jake'
+
+# Step 2: Creating our functions
 
 ageBy    = (y) -> (p) -> person (add y, p.age), p.name
 addTitle = (t) -> (p) -> person p.age, "#{t} #{p.name}"
@@ -55,20 +55,22 @@ addTitle = (t) -> (p) -> person p.age, "#{t} #{p.name}"
 ageBy1       = ageBy 1
 addTitleInd  = addTitle 'Ind.'
 
-jake         = person 22, 'jake'
-indJake      = addTitleInd jake
-olderIndJake = ageBy1 indJake
+# Step 3: Composing them together
+
+formatPerson  = (p) -> ageBy1 (addTitleInd jake)
+formattedJake = formatPerson jake
 ```
 
-Here we've defined our own value, `person`, and we created an example `person` named `jake`.  
-Since the person value now exists in our system, we can begin to create functions that rely on a `person` value being passed in, and then returning a `person` value as well.
+In the first step we've defined our own value, `person`, and we created an example `person` named `jake`.  
+Now we can begin to create functions that rely on a `person` value being passed in, and then returning a `person` value as well.
 
 We continue by defining the functions `ageBy` and `addTitle`, which are functions that return functions.  
-This is useful since we want to partially apply some generic functions, and then later pass in a `person` value.  
-In this case we've created a generic aging function, and generic title adding function. We go on to use these functions to build even more functions, and the functions we make will directly compose with the `person` value.
+We then partially apply these functions in order to create the functions `ageBy1` and `addTitleInd`.  
+These will be the functions that will directly compose with the `person` value.
 
-Now we show how how to use our new functions to compose with the `person` value.  
-We produce another `person` value whose name now has the title "Ind.", and is also a year older than the original `person` value. We do this easily by combining the functions `ageBy1` and `addTitleInd`, both of which take in a `person` value and return a `person` value.
+Next we show how to use our new functions to compose with the `person` value.  
+We start by creating a the function `formatPerson`, which takes in a `person` value and composes it with our two functions. Finally we call `formatPerson` with the `person` value `jake`, which was defined in the first step.  
+By doing this We produce another `person` value whose name now has the title "Ind.", and is one year older than `jake`. And we did this easily by combining the functions `ageBy1` and `addTitleInd` inside of `formatPerson`.
 
 More to the point, our function composition allows us to chain many transformations into our desired result.  
 Though there is still a potential flaw in our system. What would happen if some our functions would not be able to return a value?
