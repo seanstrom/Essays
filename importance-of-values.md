@@ -70,8 +70,8 @@ Next we show how to use our new functions in composition with the `person` value
 We start by creating the function `formatPerson`, which takes in a `person` value and composes it with our functions. Finally we call `formatPerson` with the `person` value `jake`, which was defined in the first step.  
 The results are that we've produced another `person` value, one with the name "Ind. Jake", and the age of `23`.  
 And we did this easily by combining the functions `ageBy1` and `addTitleInd` inside of `formatPerson`.  
-All together, the use of function composition has allowed us to chain together these transformations into our desired result.  
 
+All together, function composition has allowed us to chain together these transformations into our desired result.  
 Though there is still a potential flaw in our system's design.  
 What would happen if some our functions were not able to return a value?
 
@@ -113,12 +113,11 @@ appendFooter  = append 'Footer'
 prependHeader = prepend 'Header'
 ```
 
-Above we create some functions that will be composed with file data from `readFile`.  
-We start by creating the functions `append` and `prepend`.  
-Both of these functions in a string, and then return a function that takes in file data.  
-We'll also create the `prependHeader` and `appendFooter` functions, using more partial application.  
+Above, we begin by creating the functions `append` and `prepend`.  
+Both of these functions take in a string, and then return a function that takes in file data.  
+Using more partial application, we'll also create the `prependHeader` and `appendFooter` functions.   
 These functions are intended to be the ones that will be composed directly with the file data.  
-Now that we have defined our functions, what will happen when we try to compose the new functions with `readFile`?
+Now that we have defined our functions, we can see what will happen when we compose them with `readFile`.
 
 ```coffeescript
 file = readFile './file', (err, data) ->
@@ -164,11 +163,11 @@ This way our asynchronous functions perform their computations and then return a
 In our case we already know of an existing abstraction that is used as the pending value, it's commonly referred to as a **Promise**. Which means we can begin to use **Promises** as a way to compose together our asynchronous operations with our synchronous ones.
 
 ```coffeescript
-# Step 1: Call readFile
+# Calling readFile
 
 promise = readFile './file'
 
-# Step 2: Composing the Promise with our Functions
+# Composing the Promise with our Functions
 
 promise
   .then (fileData) -> # logic with fileData
@@ -217,8 +216,26 @@ We then create a new function, `readFormat`, that abstracts over `readFile` and 
 We then use the `formatFileAsync` function to compose with the promise from `readFile`.  
 Finally we return the **Promise** of the formatted read file.
 
-Now we have successfully taken are formally *Non-Value Returning Function*, and modified it to be a value returning function. Which makes us able to compose more functions with that value.  
+Now let's compare this to what we originally had.
 
+#### 1. What does our function take?
+
+Our function only receives the arguments needed to perform the operation.  
+We're no longer conflating the "unwrappping" mechanism with the function's arguments.
+
+#### 2. What does our function give?
+
+A **Value**. More specifically a **Promise**.  
+As we said before, we derive power from being able to compose our functions.  
+Before we were limited because we didn't return a value, but now we're able to return a pending value.  
+We've gone and removed the monkey wrench that was previously casted into our system.  
+
+**Note**
+The "unwrapping" mechanism is now the **Promise** itself. We've standardized on a way for us to represent pending values as **Promises**, which means the **Promise** can/will understand how to "unwrap" itself.
+
+#### Conclusion
+
+We've successfully taken are formally *Non-Value Returning Function*, and modified it to be a value returning function. Which makes us able to compose more functions with that value. 
 
 ### Summary
 
