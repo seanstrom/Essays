@@ -97,7 +97,9 @@ readFile './file', (err, data) ->
 ```
 
 Here we've introduced a rather simple, run-of-the-mill example of the use of some asynchronous code.  
-The `readFile` function will take in a path to a file as a string, and take in a function that acts as the correspondent of the results.  
+We have the `readFile` function, which will take in a path to a file as a string.  
+It will also be passed in a function that will act as the correspondent of the results.  
+
 Once the asynchronous operation is finished, the function will be called with the read file data.  
 We then use our own logic, in the body of the passed in function, to access that data.  
 We do this because the `readFile` function cannot return the results at the end of the function.  
@@ -111,9 +113,12 @@ appendFooter  = append 'Footer'
 prependHeader = prepend 'Header'
 ```
 
-Above we create some functions that are meant to be composed with file data from `readFile`.  
-We start by creating the functions `append` and `prepend`, which both take in a string and return a function that takes in file data. We'll also create the `prependHeader` and `appendFooter` functions for convenience.  
-Now what happens when we try to compose these new functions directly with `readFile`?
+Above we create some functions that will be composed with file data from `readFile`.  
+We start by creating the functions `append` and `prepend`.  
+Both of these functions in a string, and then return a function that takes in file data.  
+We'll also create the `prependHeader` and `appendFooter` functions, using more partial application.  
+These functions are intended to be the ones that will be composed directly with the file data.  
+Now that we have defined our functions, what will happen when we try to compose the new functions with `readFile`?
 
 ```coffeescript
 file = readFile './file', (err, data) ->
