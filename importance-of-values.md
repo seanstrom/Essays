@@ -152,11 +152,11 @@ This way our asynchronous functions perform their computations and then return a
 In our case we already know of an existing abstraction that is used as the pending value, it's commonly referred to as a **Promise**. Which means we can begin to use **Promises** as a way to compose together our asynchronous operations with our synchronous ones.
 
 ```coffeescript
-# Step 1: 
+# Step 1: Call readFile
 
 promise = readFile './file'
 
-# Step 2: 
+# Step 2: Composing the Promise with our Functions
 
 promise
   .then (fileData) -> # logic with fileData
