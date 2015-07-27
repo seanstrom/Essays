@@ -39,7 +39,7 @@ When using that pattern, we're able to use our generic functions to build up abs
 This is especially true when we start introducing our own values into the system.
 
 ```coffeescript
-# Step 1: Creating our own value
+# Creating our own value
 
 person = (age, name) ->
   age: age
@@ -47,7 +47,7 @@ person = (age, name) ->
   
 jake = person 22, 'jake'
 
-# Step 2: Creating our functions
+# Creating our functions
 
 ageBy    = (y) -> (p) -> person (add y, p.age), p.name
 addTitle = (t) -> (p) -> person p.age, "#{t} #{p.name}"
@@ -55,13 +55,13 @@ addTitle = (t) -> (p) -> person p.age, "#{t} #{p.name}"
 ageBy1       = ageBy 1
 addTitleInd  = addTitle 'Ind.'
 
-# Step 3: Composing them together
+# Composing them together
 
 formatPerson  = (p) -> ageBy1 (addTitleInd jake)
 formattedJake = formatPerson jake
 ```
 
-In the first step we defined our own value, `person`, and we created an example `person` named `jake`.  
+First we begin by defining our own value, `person`, and we create an example `person` named `jake`.  
 We continue by defining the functions `ageBy` and `addTitle`, which are functions that return functions.  
 We then partially apply these functions in order to create the functions `ageBy1` and `addTitleInd`.  
 These will be the functions that will directly compose with the `person` value.
@@ -73,18 +73,22 @@ And we did this easily by combining the functions `ageBy1` and `addTitleInd` ins
 All together, the use of function composition has allowed us to chain together these transformations into our desired result.  
 
 Though there is still a potential flaw in our system's design.  
-What would happen if some our functions would not be able to return a value?
+What would happen if some our functions were not able to return a value?
 
 
 ### The Non-Value Returning Function
 
 So far, we've gone over several examples to show how we can compose our functions with values.  
 Though all of those examples were made under the assumption that we can return values from our functions.  
-What would happen if we couldn't use our simple pattern in certain places of the program.  
+What would happen if we couldn't use our simple pattern in certain places of the program?  
 And more importantly does such a scenario exist?
 
 As of matter of fact, that scenario does exist.  
-It's likely that there are several variations of this issue, but we're only going to be focusing on one of its forms, that form being asynchronous programming. Up until now, we've only showed code samples that were *synchronous* operations. What if we have an operation that should be asynchronous, like reading a file.  
+It is likely that there are several variations of this issue, but we're only going to be focusing on one.  
+And that variation would be asynchronous programming.
+
+Up until now, we've only showed code samples that were *synchronous* operations.  
+What if we have an operation that should be asynchronous, like reading a file?  
 If that's the case then we're faced with a constraint that limits the ways we can compose our functions.
 
 ```coffeescript
@@ -92,8 +96,10 @@ readFile './file', (err, data) ->
   # logic
 ```
 
-Here we've introduced a rather simple, run-of-the-mill example of some asynchronous code.  
-The `readFile` function will take in a path to a file as a string, and take in a function that acts as the correspondent of the results. Once the asynchronous operation is finished, the function will be called with the read file data. We then use our own logic, in the body of the passed in function, to access that data.  
+Here we've introduced a rather simple, run-of-the-mill example of the use of some asynchronous code.  
+The `readFile` function will take in a path to a file as a string, and take in a function that acts as the correspondent of the results.  
+Once the asynchronous operation is finished, the function will be called with the read file data.  
+We then use our own logic, in the body of the passed in function, to access that data.  
 We do this because the `readFile` function cannot return the results at the end of the function.  
 This is because the operation is asynchronous.
 
@@ -106,7 +112,8 @@ prependHeader = prepend 'Header'
 ```
 
 Above we create some functions that are meant to be composed with file data from `readFile`.  
-We start by creating the functions `append` and `prepend`, which both take in a string and then return a function that takes in file data. We'll also create the `prependHeader` and `appendFooter` functions for convenience. Now what happens when we try to compose these new functions directly with `readFile`?
+We start by creating the functions `append` and `prepend`, which both take in a string and return a function that takes in file data. We'll also create the `prependHeader` and `appendFooter` functions for convenience.  
+Now what happens when we try to compose these new functions directly with `readFile`?
 
 ```coffeescript
 file = readFile './file', (err, data) ->
