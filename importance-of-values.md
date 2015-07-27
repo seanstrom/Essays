@@ -230,7 +230,7 @@ As we said before, we derive power from being able to compose our functions.
 Before we were limited because we didn't return a value, but now we're able to return a pending value.  
 We've gone and removed the monkey wrench that was previously casted into our system.  
 
-**Note**
+**Note**  
 The "unwrapping" mechanism is now the **Promise** itself. We've standardized on a way for us to represent pending values as **Promises**, which means the **Promise** can/will understand how to "unwrap" itself.
 
 #### Conclusion
