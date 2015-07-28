@@ -137,7 +137,7 @@ readFile './file', (err, data) ->
   formattedFile = prependHeader (appendFooter data)
 ``` 
 
-Now this may not seem problematic at first, but we should consider a few things about this code.
+Now this may not seem problematic at first, but there are a few things to consider about this code.
 
 #### 1. What does our function take?
 
