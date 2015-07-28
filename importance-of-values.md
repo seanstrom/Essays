@@ -24,7 +24,7 @@ For example, code that would normally perform operations like:
 * manipulating strings
 * iterating over data
 
-would now be be modeled as functions.
+would now be modeled as functions.
 
 ```coffeescript
 add         = (a, b) -> a + b
