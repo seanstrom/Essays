@@ -13,7 +13,7 @@ Most of what's to be covered is an opinionated stance on how I write programs.
 The concepts that will be covered can be applied to other languages, but we specifically target Javascript in the discussion. Also, for the sake of simplicity, certain topics are not explained in depth.  
 The fact is some concepts mentioned may need their own entire essay to be explained properly.  
 But I have tried to give enough of an introduction to them, while remaining focused on the core idea.  
-With all that said, let's begin.  
+With all that said, let's begin.
 
 ### Our System
 
